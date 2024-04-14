@@ -1,5 +1,6 @@
 import useEditStore, { addCmp } from "src/store/editStore";
 import styles from "./index.module.less";
+import Cmp from "../Cmp";
 
 const Canvas = () => {
   const { canvas } = useEditStore();
@@ -44,10 +45,8 @@ const Canvas = () => {
       onDrop={onDrop}
       onDragOver={allowDraop}
     >
-      {cmps.map((_cmp) => (
-        <div key={_cmp.key} style={_cmp.style}>
-          {_cmp.value}
-        </div>
+      {cmps.map((_cmp, index) => (
+        <Cmp cmp={_cmp} index={index} />
       ))}
     </div>
   );

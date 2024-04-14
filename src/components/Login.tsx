@@ -1,7 +1,13 @@
 import { Button, Checkbox, Form, FormProps, Input, Modal } from "antd";
-import { register } from "src/request/register";
-import { login, logout } from "src/request/user";
-import docCookies from "src/utils/cookies";
+import { useEffect } from "react";
+import Axios from "src/request/axios";
+import { registerEnd } from "src/request/end";
+import useGlobalStore from "src/store/globalStore";
+import useUserStore, {
+  fetchUserInfo,
+  login,
+  logout,
+} from "src/store/userStore";
 
 type FieldType = {
   username?: string;
@@ -11,33 +17,36 @@ type FieldType = {
 
 const Login = () => {
   // 校验登录
-  const auth = docCookies.getItem("sessionId");
-  const name = docCookies.getItem("name");
+  const { isLogin, name } = useUserStore();
+  const isLoading = useGlobalStore((state) => state.loading);
 
-  const handleOk = () => {
-    window.location.reload();
-  };
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
-  const handleLogout = () => {
-    logout(handleOk);
-  };
-  if (auth) {
+  if (isLoading) {
+    return;
+  }
+
+  if (isLogin) {
     return (
-      <Button onClick={handleLogout} style={{ float: "right", marginTop: 16 }}>
+      <Button onClick={logout} style={{ float: "right", marginTop: 16 }}>
         {name} 退出登录
       </Button>
     );
   }
 
-  const registerAndLogin = (values: { name: string; password: string }) => {
-    register(values, () => {
-      login(values, () => {
-        handleOk();
-      });
-    });
+  const registerAndLogin = async (values: {
+    name: string;
+    password: string;
+  }) => {
+    const res = await Axios.post(registerEnd, values);
+    if (res) {
+      await login(values);
+    }
   };
 
-  const onFinish = ({
+  const onFinish = async ({
     username,
     password,
     register_login,
@@ -49,9 +58,7 @@ const Login = () => {
     if (register_login) {
       registerAndLogin({ name: username, password });
     } else {
-      login({ name: username, password }, () => {
-        handleOk();
-      });
+      await login({ name: username, password });
     }
   };
   const onFinishFail: FormProps<FieldType>["onFinishFailed"] = () => {};

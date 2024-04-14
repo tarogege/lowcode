@@ -1,8 +1,11 @@
-import { Button, Card, Divider, Modal, Space, Table } from "antd";
+import { Button, Card, Divider, Modal, Space, Table, message } from "antd";
 import { TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { deleteCanvas, getCanvasList } from "src/request/list";
+import Axios from "src/request/axios";
+import { deleteCanvasByIdEnd, getCanvasListEnd } from "src/request/end";
+import { deleteCanvas } from "src/request/list";
+import useUserStore from "src/store/userStore";
 
 interface ListItem {
   id?: number;
@@ -13,16 +16,15 @@ interface ListItem {
 
 const ListPage = () => {
   const [list, setList] = useState([]);
+  const isLogin = useUserStore((state) => state.isLogin);
 
-  const fresh = () => {
-    getCanvasList("", (res: any) => {
-      let data = res.content || [];
-      // 不让用户编辑这三个模板页
-      data = data.filter(
-        (item: ListItem) => item.id !== 2 && item.id !== 30 && item.id !== 31
-      );
-      setList(data);
-    });
+  const fresh = async () => {
+    if (!isLogin) {
+      return;
+    }
+    const res: any = await Axios.get(getCanvasListEnd);
+    let data = res?.content || [];
+    setList(data);
   };
 
   const handleDel = (values: { id: number }) => {
@@ -32,11 +34,10 @@ const ListPage = () => {
       okText: "确认",
       okType: "danger",
       cancelText: "取消",
-      onOk() {
-        deleteCanvas(values, () => {
-          alert("删除成功");
-          fresh();
-        });
+      onOk: async () => {
+        await Axios.post(deleteCanvasByIdEnd, values.id);
+        message.success("删除成功");
+        fresh();
       },
     });
   };

@@ -1,7 +1,9 @@
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useEffect, useState } from "react";
-import TextSide from "./TextSide";
+import TextSider from "./TextSider";
+import ImgSider from "./ImgSider";
+import GraphSider from "./GraphSider";
 
 export const isTxtCmp = 1;
 export const isImgCmp = 2;
@@ -85,7 +87,9 @@ const LeftSide = () => {
           <span className={styles.cmpText}>图形</span>
         </li>
       </ul>
-      {showSide === isTxtCmp && <TextSide />}
+      {showSide === isTxtCmp && <TextSider />}
+      {showSide === isImgCmp && <ImgSider />}
+      {showSide === isGraphyCmp && <GraphSider />}
     </div>
   );
 };

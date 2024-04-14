@@ -25,7 +25,7 @@ export type editStoreStatus = {
 
 export type addCmpFC = (cmp: ICmp) => void;
 export type editStoreAction = {
-  addCmp: addCmpFC;
+  //   addCmp: addCmpFC;
 };
 
 export interface IEditStore extends editStoreStatus, editStoreAction {}
