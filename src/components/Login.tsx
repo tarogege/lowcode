@@ -20,21 +20,21 @@ const Login = () => {
   const { isLogin, name } = useUserStore();
   const isLoading = useGlobalStore((state) => state.loading);
 
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
+  //   useEffect(() => {
+  //     fetchUserInfo();
+  //   }, []);
 
   if (isLoading) {
     return;
   }
 
-  if (isLogin) {
-    return (
-      <Button onClick={logout} style={{ float: "right", marginTop: 16 }}>
-        {name} 退出登录
-      </Button>
-    );
-  }
+  // if (isLogin) {
+  return (
+    <Button onClick={logout} style={{ float: "right", marginTop: 16 }}>
+      {name} 退出登录
+    </Button>
+  );
+  // }
 
   const registerAndLogin = async (values: {
     name: string;

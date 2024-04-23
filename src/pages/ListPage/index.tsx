@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "src/request/axios";
 import { deleteCanvasByIdEnd, getCanvasListEnd } from "src/request/end";
-import { deleteCanvas } from "src/request/list";
 import useUserStore from "src/store/userStore";
 
 interface ListItem {
@@ -12,6 +11,7 @@ interface ListItem {
   type?: string; //页面或模版
   title?: string;
   content?: string;
+  [key: string]: any;
 }
 
 const ListPage = () => {
@@ -27,7 +27,7 @@ const ListPage = () => {
     setList(data);
   };
 
-  const handleDel = (values: { id: number }) => {
+  const handleDel = (id: number) => {
     Modal.confirm({
       title: "删除",
       content: "您确认要删除吗，一旦删除之后将无法恢复",
@@ -35,7 +35,7 @@ const ListPage = () => {
       okType: "danger",
       cancelText: "取消",
       onOk: async () => {
-        await Axios.post(deleteCanvasByIdEnd, values.id);
+        await Axios.post(deleteCanvasByIdEnd, { id });
         message.success("删除成功");
         fresh();
       },
@@ -43,30 +43,38 @@ const ListPage = () => {
   };
 
   const editUrl = (item: ListItem) => {
-    return `?id=${item.id}&type=${item.type}`;
+    return `/edit?id=${item.id}&type=${item.type}`;
   };
   const columns: TableProps<ListItem>["columns"] = [
     {
       title: "id",
       dataIndex: "id",
-      render: (item: ListItem) => <Link to={editUrl(item)}>{item.id}</Link>,
+      key: "id",
+      render: (txt, item: ListItem) => (
+        <Link to={editUrl(item)}>{item.id}</Link>
+      ),
     },
     {
       title: "标题",
       dataIndex: "title",
-      render: (item: ListItem) => <Link to={editUrl(item)}>{item.title}</Link>,
+      key: "title",
+      render: (txt, item: ListItem) => (
+        <Link to={editUrl(item)}>{item.title}</Link>
+      ),
     },
     {
       title: "类型",
       dataIndex: "type",
-      render: (item: ListItem) => {
+      key: "type",
+      render: (txt, item: ListItem) => {
         const label = item.type === "content" ? "页面" : "模版";
         return <div className="red">{label}</div>;
       },
     },
     {
       title: "操作",
-      render: (item: ListItem) => {
+      dataIndex: "action",
+      render: (txt, item: ListItem) => {
         return (
           <Space size="middle">
             <a
@@ -76,7 +84,7 @@ const ListPage = () => {
               线上查看（切移动端）
             </a>
             <Link to={editUrl(item)}>编辑</Link>
-            <Button danger onClick={handleDel({ id })}>
+            <Button danger onClick={() => handleDel(item.id)}>
               删除
             </Button>
           </Space>
@@ -87,11 +95,11 @@ const ListPage = () => {
 
   useEffect(() => {
     fresh();
-  }, []);
+  }, [isLogin]);
 
   return (
     <Card>
-      <Link to="/">新增</Link>
+      <Link to="/edit">新增</Link>
       <Divider />
       <Table columns={columns} dataSource={list} />
     </Card>

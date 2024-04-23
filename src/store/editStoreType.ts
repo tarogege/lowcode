@@ -21,6 +21,7 @@ export interface ICmpWithKey extends ICmp {
 
 export type editStoreStatus = {
   canvas: ICanvas;
+  assembly: Set<number>;
 };
 
 export type addCmpFC = (cmp: ICmp) => void;
