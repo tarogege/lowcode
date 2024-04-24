@@ -79,7 +79,7 @@ const ListPage = () => {
           <Space size="middle">
             <a
               target="_blank"
-              href={"https://builder-lemon.vercel.app/?id=" + item.id}
+              href={"http://builder.codebus.tech/?id=" + item.id}
             >
               线上查看（切移动端）
             </a>
