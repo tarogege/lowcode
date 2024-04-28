@@ -4,7 +4,6 @@ import { Img, Text } from "./CmpDetail";
 import styles from "./index.module.less";
 import { setCmpSelected, setCmpsSelected } from "src/store/editStore";
 import classNames from "classnames";
-
 interface ICmpProps {
   cmp: ICmpWithKey;
   index: number;

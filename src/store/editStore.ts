@@ -78,11 +78,7 @@ export const setCmpSelected = (index: number) => {
     });
   } else {
     useEditStore.setState((draft) => {
-      if (draft.assembly.has(index)) {
-        draft.assembly.delete(index);
-      } else {
-        draft.assembly = new Set([index]);
-      }
+      draft.assembly = new Set([index]);
     });
   }
 };
@@ -100,6 +96,12 @@ export const setCmpsSelected = (indexes: number[]) => {
         // setCmpSelected(index);
       });
     }
+  });
+};
+
+export const updateCanvasStyle = (newStyle: React.CSSProperties) => {
+  useEditStore.setState((draft) => {
+    Object.assign(draft.canvas.style, newStyle);
   });
 };
 
@@ -124,6 +126,43 @@ export const updateAssemblyCmpsByDistance = (newStyle: Style) => {
         draft.canvas.cmps[index] = cmp;
       }
     });
+  });
+};
+
+export const updateSelectedCmpStyle = (_style: any) => {
+  useEditStore.setState((draft) => {
+    Object.assign(
+      draft.canvas.cmps[Array.from(draft.assembly)[0]].style,
+      _style
+    );
+  });
+};
+
+export const editAssembleCmpAlign = (_style: Style) => {
+  useEditStore.setState((draft) => {
+    const canvasStyle = draft.canvas.style;
+    draft.assembly.forEach((idx) => {
+      const _s = { ...draft.canvas.cmps[idx].style };
+      if (_style.right === 0) {
+        _s.left = canvasStyle.width - _s.width;
+      } else if (_style.bottom === 0) {
+        _s.top = canvasStyle.height - _s.height;
+      } else if (_style.left === "center") {
+        _s.left = (canvasStyle.width - _s.width) / 2;
+      } else if (_style.top === "center") {
+        _s.top = (canvasStyle.height - _s.height) / 2;
+      } else {
+        Object.assign(_s, _style);
+      }
+
+      draft.canvas.cmps[idx].style = _s;
+    });
+  });
+};
+
+export const updateSelectedCmpValue = (_value: string) => {
+  useEditStore.setState((draft) => {
+    draft.canvas.cmps[Array.from(draft.assembly)[0]].value = _value;
   });
 };
 

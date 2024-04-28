@@ -3,15 +3,22 @@ import Canvas from "./Canvas";
 import styles from "./index.module.less";
 import { useEffect } from "react";
 import Zoom from "./Zoom";
-import useZoomStore from "src/store/zoomStore";
+import useZoomStore, { zoomIn, zoomOut } from "src/store/zoomStore";
 
 const Center = () => {
   const zoom = useZoomStore((state) => state.zoom);
   const canvas = useEditStore((state) => state.canvas);
   const selectAllCmps = (e) => {
+    if (e.target.nodeName === "TEXTAREA") {
+      return;
+    }
     if (e.metaKey) {
       if (e.code === "KeyA") {
         setAllCmpsSelected();
+      } else if (e.code === "Equal") {
+        zoomIn();
+      } else if (e.code === "Minus") {
+        zoomOut();
       }
     }
   };

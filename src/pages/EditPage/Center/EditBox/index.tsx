@@ -1,10 +1,15 @@
 import useEditStore, {
   updateAssemblyCmpsByDistance,
+  updateSelectedCmpStyle,
+  updateSelectedCmpValue,
 } from "src/store/editStore";
 import styles from "./index.module.less";
 import StretchDots from "./StrechDots.tsx";
 import useZoomStore from "src/store/zoomStore.ts";
-import throttle from "lodash";
+import { throttle } from "lodash";
+import { isTxtCmp } from "../../LeftSide/index.tsx";
+import ReactTextareaAutosize from "react-textarea-autosize";
+import { useState } from "react";
 
 const EditBox = () => {
   const zoom = useZoomStore((state) => state.zoom);
@@ -12,6 +17,7 @@ const EditBox = () => {
     state.assembly,
     state.canvas.cmps,
   ]);
+  const [textAreaFocused, setTextAreaFocused] = useState(false);
 
   const size = assembly.size;
   if (size === 0) {
@@ -52,8 +58,6 @@ const EditBox = () => {
 
       x = cx;
       y = cy;
-
-      console.log(disX, disY, "moveeee");
     }, 50);
 
     const up = () => {
@@ -68,9 +72,34 @@ const EditBox = () => {
   return (
     <div
       className={styles.main}
-      style={{ top, left, width, height }}
+      style={{ top, left, width, height, zIndex: 99999 }}
       onMouseDown={handleMoveCmp}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      onDoubleClick={(e) => {
+        setTextAreaFocused(true);
+      }}
     >
+      {size === 1 &&
+        cmps[Array.from(assembly)[0]].type === isTxtCmp &&
+        textAreaFocused && (
+          <ReactTextareaAutosize
+            value={cmps[Array.from(assembly)[0]].value}
+            onChange={(e) => {
+              console.log(e.target.value, "changeeee");
+              updateSelectedCmpValue(e.target.value);
+            }}
+            style={{
+              ...cmps[Array.from(assembly)[0]].style,
+              top: 2,
+              left: 2,
+            }}
+            onHeightChange={(height) => {
+              updateSelectedCmpStyle({ height });
+            }}
+          />
+        )}
       <StretchDots zoom={zoom} style={{ width, height }} />
     </div>
   );
