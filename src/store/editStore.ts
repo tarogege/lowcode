@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   ICanvas,
   ICmp,
+  ICmpWithKey,
   Style,
   editStoreAction,
   editStoreStatus,
@@ -11,24 +12,66 @@ import { getOnlyKey } from "src/utils";
 import Axios from "src/request/axios";
 import { getCanvasByIdEnd, saveCanvasEnd } from "src/request/end";
 import { resetZoom } from "./zoomStore";
+import { recordCanvasChangeHistory } from "./historySlice";
+import { cloneDeep } from "lodash";
 
 const useEditStore = create<editStoreStatus & editStoreAction>()(
   immer((set) => ({
     canvas: getDefaultCanvas(),
     assembly: new Set(),
+    canvasChangeHistory: [
+      {
+        canvas: getDefaultCanvas(),
+        assembly: new Set(),
+      },
+    ],
+    canvasChangeHistoryIndex: 0,
   }))
 );
 
 export const addCmp = (_cmp: ICmp) => {
   useEditStore.setState((draft) => {
     draft.canvas.cmps.push({ ..._cmp, key: getOnlyKey() });
+    draft.assembly = new Set([draft.canvas.cmps.length - 1]);
+    recordCanvasChangeHistory(draft);
+  });
+};
+
+export const deleteAssembly = () => {
+  useEditStore.setState((draft) => {
+    draft.canvas.cmps = draft.canvas.cmps.filter(
+      (cmp, idx) => !draft.assembly.has(idx)
+    );
+    draft.assembly.clear();
+    recordCanvasChangeHistory(draft);
+  });
+};
+
+export const addSelectCmp = () => {
+  useEditStore.setState((draft) => {
+    const newCmps: Array<ICmpWithKey> = [];
+    const newAssembly: Set<number> = new Set();
+    let len = draft.canvas.cmps.length;
+
+    draft.assembly.forEach((idx) => {
+      const cmp = cloneDeep(draft.canvas.cmps[idx]);
+      cmp.key = getOnlyKey();
+      cmp.style.left += 40;
+      cmp.style.top += 40;
+      newCmps.push(cmp);
+      newAssembly.add(len++);
+    });
+    draft.assembly = newAssembly;
+    draft.canvas.cmps = draft.canvas.cmps.concat(newCmps);
+    recordCanvasChangeHistory(draft);
   });
 };
 
 export const clearCanvas = () => {
-  useEditStore.setState({
-    canvas: getDefaultCanvas(),
-    assembly: new Set(),
+  useEditStore.setState((draft) => {
+    (draft.canvas = getDefaultCanvas()),
+      (draft.assembly = new Set()),
+      recordCanvasChangeHistory(draft);
   });
   resetZoom();
 };
@@ -54,6 +97,14 @@ export const fetchCanvas = async (id: number) => {
     useEditStore.setState((draft) => {
       draft.canvas = JSON.parse(res.content);
       draft.canvas.title = res.title;
+      draft.assembly.clear();
+      draft.canvasChangeHistory = [
+        {
+          canvas: draft.canvas,
+          assembly: draft.assembly,
+        },
+      ];
+      draft.canvasChangeHistoryIndex = 0;
     });
   }
 };
@@ -102,6 +153,7 @@ export const setCmpsSelected = (indexes: number[]) => {
 export const updateCanvasStyle = (newStyle: React.CSSProperties) => {
   useEditStore.setState((draft) => {
     Object.assign(draft.canvas.style, newStyle);
+    recordCanvasChangeHistory(draft);
   });
 };
 
@@ -135,6 +187,7 @@ export const updateSelectedCmpStyle = (_style: any) => {
       draft.canvas.cmps[Array.from(draft.assembly)[0]].style,
       _style
     );
+    recordCanvasChangeHistory(draft);
   });
 };
 
@@ -157,12 +210,14 @@ export const editAssembleCmpAlign = (_style: Style) => {
 
       draft.canvas.cmps[idx].style = _s;
     });
+    recordCanvasChangeHistory(draft);
   });
 };
 
 export const updateSelectedCmpValue = (_value: string) => {
   useEditStore.setState((draft) => {
     draft.canvas.cmps[Array.from(draft.assembly)[0]].value = _value;
+    recordCanvasChangeHistory(draft);
   });
 };
 

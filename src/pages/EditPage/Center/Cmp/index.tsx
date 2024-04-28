@@ -26,7 +26,7 @@ const Cmp = (props: ICmpProps) => {
   return (
     <div
       className={classNames(styles.main, isSelected && "selectedBorder")}
-      style={outStyle}
+      style={{ ...outStyle, zIndex: isSelected ? 9999 : index }}
       onClick={selectCmp}
       contentEditable={false}
     >

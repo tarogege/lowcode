@@ -9,7 +9,9 @@ import useZoomStore from "src/store/zoomStore.ts";
 import { throttle } from "lodash";
 import { isTxtCmp } from "../../LeftSide/index.tsx";
 import ReactTextareaAutosize from "react-textarea-autosize";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { recordCanvasChangeHistory_2 } from "src/store/historySlice.ts";
+import Menu from "../Menu/index.tsx";
 
 const EditBox = () => {
   const zoom = useZoomStore((state) => state.zoom);
@@ -18,8 +20,15 @@ const EditBox = () => {
     state.canvas.cmps,
   ]);
   const [textAreaFocused, setTextAreaFocused] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const size = assembly.size;
+
+  useEffect(() => {
+    if (size === 0) {
+      setShowMenu(false);
+    }
+  }, [size]);
   if (size === 0) {
     return null;
   }
@@ -63,6 +72,7 @@ const EditBox = () => {
     const up = () => {
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
+      recordCanvasChangeHistory_2();
     };
 
     document.addEventListener("mousemove", move);
@@ -76,18 +86,22 @@ const EditBox = () => {
       onMouseDown={handleMoveCmp}
       onClick={(e) => {
         e.stopPropagation();
+        setShowMenu(false);
       }}
       onDoubleClick={(e) => {
         setTextAreaFocused(true);
       }}
+      onContextMenu={(e) => {
+        setShowMenu(true);
+      }}
     >
+      {showMenu && <Menu style={{ left: width }} size={size} />}
       {size === 1 &&
         cmps[Array.from(assembly)[0]].type === isTxtCmp &&
         textAreaFocused && (
           <ReactTextareaAutosize
             value={cmps[Array.from(assembly)[0]].value}
             onChange={(e) => {
-              console.log(e.target.value, "changeeee");
               updateSelectedCmpValue(e.target.value);
             }}
             style={{

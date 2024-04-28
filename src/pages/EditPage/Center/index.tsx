@@ -4,6 +4,10 @@ import styles from "./index.module.less";
 import { useEffect } from "react";
 import Zoom from "./Zoom";
 import useZoomStore, { zoomIn, zoomOut } from "src/store/zoomStore";
+import {
+  goNextCanvasHistory,
+  goPrevCanvasHistory,
+} from "src/store/historySlice";
 
 const Center = () => {
   const zoom = useZoomStore((state) => state.zoom);
@@ -19,6 +23,12 @@ const Center = () => {
         zoomIn();
       } else if (e.code === "Minus") {
         zoomOut();
+      } else if (e.code === "KeyZ") {
+        if (e.shiftKey) {
+          goNextCanvasHistory();
+        } else {
+          goPrevCanvasHistory();
+        }
       }
     }
   };
@@ -34,6 +44,9 @@ const Center = () => {
       id="center"
       className={styles.main}
       style={{ minHeight: canvas.style.height * (zoom / 100) + 100 }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}
     >
       <Canvas />
       <Zoom />

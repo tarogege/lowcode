@@ -1,6 +1,7 @@
 import { updateAssemblyCmpsByDistance } from "src/store/editStore";
 import styles from "./index.module.less";
 import { throttle } from "lodash";
+import { recordCanvasChangeHistory_2 } from "src/store/historySlice";
 
 interface IStretchDotsProps {
   zoom: number;
@@ -51,6 +52,7 @@ const StretchDots = (props: IStretchDotsProps) => {
     const up = () => {
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
+      recordCanvasChangeHistory_2();
     };
     document.addEventListener("mousemove", move);
     document.addEventListener("mouseup", up);

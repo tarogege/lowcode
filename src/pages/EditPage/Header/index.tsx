@@ -4,6 +4,10 @@ import classNames from "classnames";
 import { clearCanvas, saveCanvas } from "src/store/editStore";
 import { useCanvasId, useCanvasType } from "src/store/hooks";
 import { message } from "antd";
+import {
+  goNextCanvasHistory,
+  goPrevCanvasHistory,
+} from "src/store/historySlice";
 
 const Header = () => {
   let id = useCanvasId();
@@ -35,6 +39,14 @@ const Header = () => {
     await saveCanvas(id, type, onSuccess);
   };
 
+  const goPrev = () => {
+    goPrevCanvasHistory();
+  };
+
+  const goNext = () => {
+    goNextCanvasHistory();
+  };
+
   const clear = () => {
     clearCanvas();
   };
@@ -55,7 +67,7 @@ const Header = () => {
         ></span>
         <span className={styles.txt}>保存并预览</span>
       </div>
-      <div className={styles.item}>
+      <div className={styles.item} onClick={goPrev}>
         <span
           className={classNames(
             "iconfont icon-chexiaofanhuichehuishangyibu",
@@ -65,13 +77,14 @@ const Header = () => {
         <span className={styles.txt}>上一步</span>
         <span className={styles.shortKey}>CMD+Z</span>
       </div>
-      <div className={styles.item}>
+      <div className={styles.item} onClick={goNext}>
         <span
           className={classNames(
             "iconfont icon-chexiaofanhuichehuishangyibu",
             styles.icon
           )}
-          style={{ transform: `rotateY{180}deg` }}
+          style={{ transform: `rotateY(180deg)` }}
+          onClick={goNext}
         ></span>
         <span className={styles.txt}>下一步</span>
         <span className={styles.shortKey}>CMD+Shift+Z</span>
