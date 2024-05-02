@@ -14,7 +14,7 @@ import useZoomStore from "src/store/zoomStore";
 
 const Canvas = () => {
   const { canvas, assembly } = useEditStore();
-  const { cmps, style } = canvas;
+  const { cmps, style } = canvas.content;
   const id = useCanvasId();
   const zoom = useZoomStore((state) => state.zoom);
 
@@ -59,7 +59,6 @@ const Canvas = () => {
   };
 
   const clearSelect = (e) => {
-    console.log(e, "aaa");
     if (e.target?.id === "canvas") {
       setCmpSelected(-1);
     }
@@ -69,7 +68,7 @@ const Canvas = () => {
     <div
       id="canvas"
       className={styles.main}
-      style={{ ...canvas.style, transform: `scale(${zoom / 100})` }}
+      style={{ ...canvas.content.style, transform: `scale(${zoom / 100})` }}
       onDrop={onDrop}
       onDragOver={allowDraop}
       onClick={clearSelect}

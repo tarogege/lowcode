@@ -2,33 +2,63 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./index.module.less";
 import classNames from "classnames";
 import { clearCanvas, saveCanvas } from "src/store/editStore";
-import { useCanvasId, useCanvasType } from "src/store/hooks";
+import { useCanvasId } from "src/store/hooks";
 import { message } from "antd";
 import {
   goNextCanvasHistory,
   goPrevCanvasHistory,
 } from "src/store/historySlice";
+import { useEffect } from "react";
 
 const Header = () => {
   let id = useCanvasId();
-  const type = useCanvasType();
   const navigate = useNavigate();
-  // save
-  const handleSave = async () => {
-    const onSuccess = (_id: number) => {
-      message.success("保存成功");
-      if (id === null) {
+
+  useEffect(() => {
+    const saveSuccess = (_id: number, isNew: boolean) => {
+      if (isNew) {
         navigate(`?id=${_id}`);
       }
     };
-    await saveCanvas(id, type, onSuccess);
+    const keyDown = (e) => {
+      if (e.target.nodeName === "TEXTAREA") {
+        return;
+      }
+      if (e.metaKey) {
+        if (e.code === "KeyZ") {
+          if (e.shiftKey) {
+            goNextCanvasHistory();
+          } else {
+            goPrevCanvasHistory();
+          }
+        } else if (e.code === "KeyS") {
+          saveCanvas(saveSuccess);
+          e.preventDefault();
+        }
+      }
+    };
+    document.addEventListener("keydown", keyDown);
+    return () => {
+      document.removeEventListener("keydown", keyDown);
+    };
+  }, []);
+
+  // save
+  const handleSave = async () => {
+    const onSuccess = (_id: number, isNew: boolean) => {
+      message.success("保存成功");
+      if (isNew) {
+        navigate(`?id=${_id}`);
+      }
+    };
+    await saveCanvas(onSuccess);
   };
   // save and preview
   const handleSaveAndPreview = async () => {
-    const onSuccess = (_id: number) => {
+    const onSuccess = (_id: number, isNew: boolean) => {
       message.success("保存成功");
 
-      if (id === null) {
+      if (isNew) {
         // 新增
         navigate(`?id=${_id}`);
       }
@@ -36,7 +66,7 @@ const Header = () => {
       // 跳转生成器项目页
       window.open("http://builder.codebus.tech?id=" + (id === null ? _id : id));
     };
-    await saveCanvas(id, type, onSuccess);
+    await saveCanvas(onSuccess);
   };
 
   const goPrev = () => {

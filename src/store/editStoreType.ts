@@ -4,6 +4,12 @@ export type Style = React.CSSProperties;
 
 export interface ICanvas {
   title: string;
+  id: number | null;
+  content: IContent;
+  type: "content" | "template";
+}
+
+export interface IContent {
   style: Style;
   cmps: Array<ICmpWithKey>;
 }

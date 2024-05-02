@@ -25,7 +25,7 @@ const RightSide = () => {
         (assembly.size === 0 ? (
           <EditCanvas canvas={canvas} />
         ) : assembly.size === 1 ? (
-          <EditCmp cmp={canvas.cmps[Array.from(assembly)[0]]} />
+          <EditCmp cmp={canvas.content.cmps[Array.from(assembly)[0]]} />
         ) : (
           <EditMultiCmps />
         ))}

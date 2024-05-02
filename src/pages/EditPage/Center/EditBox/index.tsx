@@ -17,7 +17,7 @@ const EditBox = () => {
   const zoom = useZoomStore((state) => state.zoom);
   const [assembly, cmps] = useEditStore((state) => [
     state.assembly,
-    state.canvas.cmps,
+    state.canvas.content.cmps,
   ]);
   const [textAreaFocused, setTextAreaFocused] = useState(false);
   const [showMenu, setShowMenu] = useState(false);

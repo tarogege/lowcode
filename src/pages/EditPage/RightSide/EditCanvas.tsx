@@ -24,7 +24,7 @@ const EditCanvas = ({ canvas }: { canvas: ICanvas }) => {
       </Item>
       <Item label="画布宽度（px）">
         <input
-          value={canvas.style.width}
+          value={canvas.content.style.width}
           className={styles.itemRight}
           onChange={(e) => {
             onStyleChange(e, {
@@ -36,7 +36,7 @@ const EditCanvas = ({ canvas }: { canvas: ICanvas }) => {
       </Item>
       <Item label="画布高度（px）">
         <input
-          value={canvas.style.height}
+          value={canvas.content.style.height}
           className={styles.itemRight}
           onChange={(e) =>
             onStyleChange(e, {
@@ -48,7 +48,7 @@ const EditCanvas = ({ canvas }: { canvas: ICanvas }) => {
       </Item>
       <Item label="背景颜色">
         <InputColor
-          color={canvas.style.backgroundColor}
+          color={canvas.content.style.backgroundColor}
           className={styles.itemRight}
           onChangeComplete={(color: any, e: any) =>
             onStyleChange(e, { name: "backgroundColor", value: color.hex })
@@ -57,7 +57,7 @@ const EditCanvas = ({ canvas }: { canvas: ICanvas }) => {
       </Item>
       <Item label="背景图片">
         <input
-          value={canvas.style.backgroundImage}
+          value={canvas.content.style.backgroundImage}
           className={styles.itemRight}
           onChange={(e) =>
             onStyleChange(e, { name: "backgroundImage", value: e.target.value })

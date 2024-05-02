@@ -1,6 +1,13 @@
 import { Style } from "src/store/editStoreType";
 import styles from "./index.module.less";
-import { addSelectCmp, deleteAssembly } from "src/store/editStore";
+import {
+  addSelectCmp,
+  bottomZIndex,
+  deleteAssembly,
+  downZIndex,
+  topZIndex,
+  upZIndex,
+} from "src/store/editStore";
 
 interface IMenuProps {
   size: number;
@@ -21,10 +28,10 @@ const Menu = ({ size, style }: IMenuProps) => {
         <li onClick={onDelete}>删除组件</li>
         {size === 1 && (
           <>
-            <li>上移一层</li>
-            <li>下移一层</li>
-            <li>置顶</li>
-            <li>置底</li>
+            <li onClick={upZIndex}>上移一层</li>
+            <li onClick={downZIndex}>下移一层</li>
+            <li onClick={topZIndex}>置顶</li>
+            <li onClick={bottomZIndex}>置底</li>
           </>
         )}
       </ul>
