@@ -46,11 +46,11 @@ const EditBox = () => {
     right = Math.max(right, cmp.style.left + cmp.style.width);
   });
 
-  const width = right - left + 8;
-  const height = bottom - top + 8;
+  const width = right - left + 4;
+  const height = bottom - top + 4;
 
-  top -= 4;
-  left -= 4;
+  top -= 2;
+  left -= 2;
 
   const handleMoveCmp = (e) => {
     let x = e.pageX;
@@ -106,8 +106,8 @@ const EditBox = () => {
             }}
             style={{
               ...cmps[Array.from(assembly)[0]].style,
-              top: 2,
-              left: 2,
+              top: 0,
+              left: 0,
             }}
             onHeightChange={(height) => {
               updateSelectedCmpStyle({ height });

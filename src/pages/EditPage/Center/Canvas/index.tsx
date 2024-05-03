@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useCanvasId } from "src/store/hooks";
 import EditBox from "../EditBox";
 import useZoomStore from "src/store/zoomStore";
+import { ICmpWithKey } from "src/store/editStoreType";
 
 const Canvas = () => {
   const { canvas, assembly } = useEditStore();
@@ -31,7 +32,7 @@ const Canvas = () => {
     if (!dragCmp) {
       return;
     }
-    dragCmp = JSON.parse(dragCmp);
+    dragCmp = JSON.parse(dragCmp) as ICmpWithKey;
 
     // 获取拖拽项的位置
     // 鼠标相对于页面的位置

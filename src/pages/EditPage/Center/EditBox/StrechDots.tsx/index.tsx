@@ -66,8 +66,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: -8,
-          top: -8,
+          left: -9,
+          top: -9,
           transform,
           cursor: "nwse-resize",
         }}
@@ -77,8 +77,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: width / 2 - 8,
-          top: -8,
+          left: width / 2 - 9,
+          top: -9,
           transform,
           cursor: "row-resize",
         }}
@@ -88,8 +88,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: width - 8,
-          top: -8,
+          left: width - 11,
+          top: -9,
           transform,
           cursor: "nesw-resize",
         }}
@@ -99,8 +99,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: width - 8,
-          top: height / 2 - 8,
+          left: width - 11,
+          top: height / 2 - 9,
           transform,
           cursor: "column-resize",
         }}
@@ -110,8 +110,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: width - 8,
-          top: height - 8,
+          left: width - 11,
+          top: height - 11,
           transform,
           cursor: "nwse-resize",
         }}
@@ -121,8 +121,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: width / 2 - 8,
-          top: height - 8,
+          left: width / 2 - 9,
+          top: height - 11,
           transform,
           cursor: "row-resize",
         }}
@@ -132,8 +132,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: -8,
-          top: height - 8,
+          left: -9,
+          top: height - 11,
           transform,
           cursor: "nesw-resize",
         }}
@@ -143,8 +143,8 @@ const StretchDots = (props: IStretchDotsProps) => {
       <div
         className={styles.stretchDot}
         style={{
-          left: -8,
-          top: height / 2 - 8,
+          left: -9,
+          top: height / 2 - 9,
           transform,
           cursor: "column-resize",
         }}

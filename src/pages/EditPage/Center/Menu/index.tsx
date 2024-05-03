@@ -1,6 +1,6 @@
-import { Style } from "src/store/editStoreType";
+import { ICmpWithKey, Style } from "src/store/editStoreType";
 import styles from "./index.module.less";
-import {
+import useEditStore, {
   addSelectCmp,
   bottomZIndex,
   deleteAssembly,
@@ -8,6 +8,7 @@ import {
   topZIndex,
   upZIndex,
 } from "src/store/editStore";
+import Item from "./Item";
 
 interface IMenuProps {
   size: number;
@@ -15,12 +16,45 @@ interface IMenuProps {
 }
 
 const Menu = ({ size, style }: IMenuProps) => {
+  const [cmps, assembly] = useEditStore((state) => [
+    state.canvas.content.cmps,
+    state.assembly,
+  ]);
+  const selectedIdx = Array.from(assembly)[0];
   const onDelete = () => {
     deleteAssembly();
   };
   const onCopy = () => {
     addSelectCmp();
   };
+  const overlap = (cmp: ICmpWithKey) => {
+    const selectedCmp = cmps[selectedIdx];
+    const selectedCmpStyle = {
+      top: selectedCmp.style.top,
+      left: selectedCmp.style.left,
+      right: selectedCmp.style.left + selectedCmp.style.width,
+      bottom: selectedCmp.style.top + selectedCmp.style.height,
+    };
+
+    const outerCmpStyle = {
+      top: cmp.style.top,
+      left: cmp.style.left,
+      right: cmp.style.left + cmp.style.width,
+      bottom: cmp.style.top + cmp.style.height,
+    };
+
+    if (
+      outerCmpStyle.bottom < selectedCmpStyle.top ||
+      outerCmpStyle.right < selectedCmpStyle.left ||
+      outerCmpStyle.top > selectedCmpStyle.bottom ||
+      outerCmpStyle.left > selectedCmpStyle.right
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <div style={style} className={styles.main}>
       <ul className={styles.menu}>
@@ -32,9 +66,19 @@ const Menu = ({ size, style }: IMenuProps) => {
             <li onClick={downZIndex}>下移一层</li>
             <li onClick={topZIndex}>置顶</li>
             <li onClick={bottomZIndex}>置底</li>
+            <li>附近组件</li>
           </>
         )}
       </ul>
+      {size === 1 && (
+        <ul className={styles.nearByCmps}>
+          {cmps.map((cmp, idx) => {
+            if (idx !== selectedIdx && overlap(cmp)) {
+              return <Item cmp={cmp} index={idx} />;
+            }
+          })}
+        </ul>
+      )}
     </div>
   );
 };
