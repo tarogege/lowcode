@@ -16,6 +16,9 @@ import { resetZoom } from "./zoomStore";
 import { recordCanvasChangeHistory } from "./historySlice";
 import { cloneDeep } from "lodash";
 
+const showDiff = 12;
+const adjustDiff = 3;
+
 const useEditStore = create<editStoreStatus & editStoreAction>()(
   immer((set) => ({
     canvas: getDefaultCanvas(),
@@ -165,7 +168,10 @@ export const updateCanvasStyle = (newStyle: React.CSSProperties) => {
 };
 
 // 移动选中组件
-export const updateAssemblyCmpsByDistance = (newStyle: Style) => {
+export const updateAssemblyCmpsByDistance = (
+  newStyle: Style,
+  autoAdjustment?: boolean
+) => {
   useEditStore.setState((draft) => {
     draft.assembly.forEach((index) => {
       const cmp = { ...draft.canvas.content.cmps[index] };
@@ -181,12 +187,80 @@ export const updateAssemblyCmpsByDistance = (newStyle: Style) => {
         cmp.style[key] += newStyle[key];
       }
 
+      if (draft.assembly.size === 1 && autoAdjustment) {
+        autoAlignToCanvas(draft.canvas.content.style, cmp);
+      }
+
       if (!invalid) {
         draft.canvas.content.cmps[index] = cmp;
       }
     });
   });
 };
+
+// 对齐画布
+// ?考虑放大缩小
+function autoAlignToCanvas(targetStyle: Style, selectedCmp: ICmpWithKey) {
+  // !对齐上 选中元素的定位已经是根据canvas的定位了
+  autoAlign(selectedCmp.style.top, "canvasLineTop", () => {
+    selectedCmp.style.top = 0;
+  });
+  // !对齐下
+  autoAlign(
+    targetStyle.height - (selectedCmp.style.top + selectedCmp.style.height),
+    "canvasLineBottom",
+    () => {
+      selectedCmp.style.top = targetStyle.height - selectedCmp.style.height;
+    }
+  );
+  // !对齐左
+  autoAlign(selectedCmp.style.left, "canvasLineLeft", () => {
+    selectedCmp.style.left = 0;
+  });
+  // !对齐右
+  autoAlign(
+    targetStyle.width - (selectedCmp.style.left + selectedCmp.style.width),
+    "canvasLineRight",
+    () => {
+      selectedCmp.style.left = targetStyle.width - selectedCmp.style.width;
+    }
+  );
+  // !对齐x中轴
+  autoAlign(
+    targetStyle.height / 2 -
+      (selectedCmp.style.top + selectedCmp.style.height / 2),
+    "centerXLine",
+    () => {
+      selectedCmp.style.top =
+        (targetStyle.height - selectedCmp.style.height) / 2;
+    }
+  );
+  // !对齐y中轴
+  autoAlign(
+    targetStyle.width / 2 -
+      (selectedCmp.style.left + selectedCmp.style.width / 2),
+    "centerYLine",
+    () => {
+      selectedCmp.style.left =
+        (targetStyle.width - selectedCmp.style.width) / 2;
+    }
+  );
+}
+
+function autoAlign(_distance: number, lineId: string, align: () => void) {
+  // show
+  const distance = Math.abs(_distance);
+  if (distance < showDiff) {
+    const el = document.getElementById(lineId);
+    console.log(lineId, el, "eeeeee");
+    if (el) {
+      el.style.display = "block";
+    }
+  }
+  if (distance < adjustDiff) {
+    align();
+  }
+}
 
 export const updateSelectedCmpStyle = (_style: any) => {
   useEditStore.setState((draft) => {
