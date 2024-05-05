@@ -62,6 +62,14 @@ const AlignLines = ({ canvasStyle }: IAlignLinesPorps) => {
           backgroundColor: "red",
         }}
       />
+
+      {/* 组件对齐线 */}
+      <Line id="lineTop" />
+      <Line id="lineBottom" />
+      <Line id="lineLeft" />
+      <Line id="lineRight" />
+      <Line id="lineX" />
+      <Line id="lineY" />
     </>
   );
 };

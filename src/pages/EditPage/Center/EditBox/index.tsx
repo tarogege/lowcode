@@ -31,6 +31,11 @@ const EditBox = () => {
       setShowMenu(false);
     }
   }, [size]);
+
+  useEffect(() => {
+    setTextAreaFocused(false);
+  }, [assembly]);
+
   if (size === 0) {
     return null;
   }
@@ -53,6 +58,8 @@ const EditBox = () => {
 
   top -= 2;
   left -= 2;
+
+  console.log(right, height, top, left, "edit box position");
 
   const handleMoveCmp = (e) => {
     let x = e.pageX;

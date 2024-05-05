@@ -2,7 +2,7 @@ import { Style } from "src/store/editStoreType";
 
 interface ILineProps {
   id?: string;
-  style: Style;
+  style?: Style;
 }
 const Line = ({ style, ...rest }: ILineProps) => {
   return (

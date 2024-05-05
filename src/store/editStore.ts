@@ -9,7 +9,7 @@ import {
   editStoreStatus,
 } from "./editStoreType";
 import { immer } from "zustand/middleware/immer";
-import { getOnlyKey } from "src/utils";
+import { getOnlyKey, inView } from "src/utils";
 import Axios from "src/request/axios";
 import { getCanvasByIdEnd, saveCanvasEnd } from "src/request/end";
 import { resetZoom } from "./zoomStore";
@@ -189,6 +189,12 @@ export const updateAssemblyCmpsByDistance = (
 
       if (draft.assembly.size === 1 && autoAdjustment) {
         autoAlignToCanvas(draft.canvas.content.style, cmp);
+
+        draft.canvas.content.cmps.forEach((_cmp, idx) => {
+          if (idx !== index && inView(_cmp)) {
+            autoAlignToCmp(_cmp.style, cmp, draft.canvas.content.style);
+          }
+        });
       }
 
       if (!invalid) {
@@ -197,6 +203,187 @@ export const updateAssemblyCmpsByDistance = (
     });
   });
 };
+
+// 对齐组件
+// ?是否需要考虑zoom？
+function autoAlignToCmp(
+  targetStyle: Style,
+  selectedCmp: ICmpWithKey,
+  canvasStyle: Style
+) {
+  // !top top
+  autoAlign(
+    selectedCmp.style.top - targetStyle.top,
+    "lineTop",
+    () => {
+      selectedCmp.style.top = targetStyle.top;
+    },
+    (domLine) => {
+      domLine.style.left = 0 + "px";
+      domLine.style.top = targetStyle.top + "px";
+      domLine.style.width = canvasStyle.width + "px";
+    }
+  );
+  // !top bottom
+  autoAlign(
+    selectedCmp.style.top - targetStyle.top - targetStyle.height,
+    "lineBottom",
+    () => {
+      selectedCmp.style.top = targetStyle.top + targetStyle.height;
+    },
+    (domLine) => {
+      domLine.style.width = canvasStyle.width + "px";
+      domLine.style.left = 0 + "px";
+      domLine.style.top = targetStyle.top + targetStyle.height + "px";
+    }
+  );
+  // !bottom top
+  autoAlign(
+    targetStyle.top - selectedCmp.style.top - selectedCmp.style.height,
+    "lineTop",
+    () => {
+      selectedCmp.style.top = targetStyle.top - selectedCmp.style.height;
+    },
+    (domLine) => {
+      domLine.style.left = 0 + "px";
+      domLine.style.top = targetStyle.top + "px";
+      domLine.style.width = canvasStyle.width + "px";
+    }
+  );
+  // !bottom bottom
+  autoAlign(
+    targetStyle.height +
+      targetStyle.top -
+      selectedCmp.style.top -
+      selectedCmp.style.height,
+    "lineBottom",
+    () => {
+      selectedCmp.style.top =
+        targetStyle.top + targetStyle.height - selectedCmp.style.height;
+    },
+    (domLine) => {
+      domLine.style.left = 0 + "px";
+      domLine.style.top = targetStyle.top + targetStyle.height + "px";
+      domLine.style.width = canvasStyle.width + "px";
+    }
+  );
+  // !left left
+  autoAlign(
+    selectedCmp.style.left - targetStyle.left,
+    "lineLeft",
+    () => {
+      selectedCmp.style.left = targetStyle.left;
+    },
+    (domLine) => {
+      domLine.style.top = 0 + "px";
+      domLine.style.left = targetStyle.left + "px";
+      domLine.style.height = canvasStyle.height + "px";
+    }
+  );
+  // !left right
+  autoAlign(
+    selectedCmp.style.left - targetStyle.left - targetStyle.width,
+    "lineRight",
+    () => {
+      selectedCmp.style.left = targetStyle.left + targetStyle.width;
+    },
+    (domLine) => {
+      domLine.style.top = 0 + "px";
+      domLine.style.left = targetStyle.left + targetStyle.width + "px";
+      domLine.style.height = canvasStyle.height + "px";
+    }
+  );
+  // !right left
+  autoAlign(
+    targetStyle.left - selectedCmp.style.left - selectedCmp.style.width,
+    "lineLeft",
+    () => {
+      selectedCmp.style.left = targetStyle.left - selectedCmp.style.width;
+    },
+    (domLine) => {
+      domLine.style.top = 0 + "px";
+      domLine.style.left = targetStyle.left + "px";
+      domLine.style.height = canvasStyle.height + "px";
+    }
+  );
+  // !right right
+  autoAlign(
+    targetStyle.left +
+      targetStyle.width -
+      selectedCmp.style.left -
+      selectedCmp.style.width,
+    "lineRight",
+    () => {
+      selectedCmp.style.left =
+        targetStyle.left + targetStyle.width - selectedCmp.style.width;
+    },
+    (domLine) => {
+      domLine.style.top = 0 + "px";
+      domLine.style.left = targetStyle.left + targetStyle.width + "px";
+      domLine.style.height = canvasStyle.height + "px";
+    }
+  );
+  // !top centerX
+  autoAlign(
+    selectedCmp.style.top - targetStyle.top - targetStyle.height / 2,
+    "lineX",
+    () => {
+      selectedCmp.style.top = targetStyle.top + targetStyle.height / 2;
+    },
+    (domLine) => {
+      domLine.style.left = 0 + "px";
+      domLine.style.top = targetStyle.top + targetStyle.height / 2 + "px";
+      domLine.style.width = canvasStyle.width + "px";
+    }
+  );
+  // !bottom centerX
+  autoAlign(
+    targetStyle.top +
+      targetStyle.height / 2 -
+      selectedCmp.style.top -
+      selectedCmp.style.width,
+    "lineX",
+    () => {
+      selectedCmp.style.top =
+        targetStyle.top + targetStyle.height / 2 - selectedCmp.style.height;
+    },
+    (domLine) => {
+      domLine.style.left = 0 + "px";
+      domLine.style.top = targetStyle.top + targetStyle.height / 2 + "px";
+      domLine.style.width = canvasStyle.width + "px";
+    }
+  );
+  // !left centerY
+  autoAlign(
+    selectedCmp.style.left - targetStyle.left - targetStyle.width / 2,
+    "lineY",
+    () => {
+      selectedCmp.style.left = targetStyle.left + targetStyle.width / 2;
+    },
+    (domLine) => {
+      domLine.style.left = targetStyle.left + targetStyle.width / 2 + "px";
+      domLine.style.top = 0 + "px";
+      domLine.style.height = canvasStyle.height + "px";
+    }
+  );
+  // !right centerY
+  autoAlign(
+    targetStyle.left +
+      targetStyle.width / 2 -
+      selectedCmp.style.left -
+      selectedCmp.style.width,
+    "lineY",
+    () => {
+      selectedCmp.style.left =
+        targetStyle.left + targetStyle.width / 2 - selectedCmp.style.width;
+    },
+    (domLine) => {
+      domLine.style.left = targetStyle.left + targetStyle.width / 2 + "px";
+      domLine.style.top = 0 + "px";
+      domLine.style.height = canvasStyle.height + "px";
+    }
+  );
+}
 
 // 对齐画布
 // ?考虑放大缩小
@@ -247,7 +434,12 @@ function autoAlignToCanvas(targetStyle: Style, selectedCmp: ICmpWithKey) {
   );
 }
 
-function autoAlign(_distance: number, lineId: string, align: () => void) {
+function autoAlign(
+  _distance: number,
+  lineId: string,
+  align: () => void,
+  adjustDomLine?: (domLine: HTMLElement) => void
+) {
   // show
   const distance = Math.abs(_distance);
   if (distance < showDiff) {
@@ -255,6 +447,7 @@ function autoAlign(_distance: number, lineId: string, align: () => void) {
     console.log(lineId, el, "eeeeee");
     if (el) {
       el.style.display = "block";
+      adjustDomLine?.(el);
     }
   }
   if (distance < adjustDiff) {
