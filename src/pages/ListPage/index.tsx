@@ -3,7 +3,12 @@ import { TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "src/request/axios";
-import { deleteCanvasByIdEnd, getCanvasListEnd } from "src/request/end";
+import {
+  deleteCanvasByIdEnd,
+  getCanvasListEnd,
+  saveCanvasEnd,
+} from "src/request/end";
+import { ICmpWithKey } from "src/store/editStoreType";
 import useUserStore from "src/store/userStore";
 
 interface ListItem {
@@ -45,6 +50,32 @@ const ListPage = () => {
   const editUrl = (item: ListItem) => {
     return `/edit?id=${item.id}&type=${item.type}`;
   };
+
+  const onCopy = async (item: ListItem) => {
+    const res: any = Axios.post(saveCanvasEnd, {
+      id: null,
+      type: item.type,
+      title: item.title,
+      content: item.content,
+    });
+    if (res) {
+      message.success("复制成功");
+      fresh();
+    }
+  };
+  const onSaveTpl = async (item: ListItem) => {
+    const res = await Axios.post(saveCanvasEnd, {
+      id: null,
+      type: "template",
+      title: item.title + "模版",
+      content: item.content,
+    });
+    if (res) {
+      message.success("保存成功");
+      fresh();
+    }
+  };
+
   const columns: TableProps<ListItem>["columns"] = [
     {
       title: "id",
@@ -84,6 +115,10 @@ const ListPage = () => {
               线上查看（切移动端）
             </a>
             <Link to={editUrl(item)}>编辑</Link>
+            <Button onClick={() => onCopy(item)}>复制</Button>
+            {item.type === "content" && (
+              <Button onClick={() => onSaveTpl(item)}>保存为模版</Button>
+            )}
             <Button danger onClick={() => handleDel(item.id)}>
               删除
             </Button>

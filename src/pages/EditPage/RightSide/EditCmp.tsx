@@ -39,7 +39,6 @@ const EditCmp = ({ cmp }: { cmp: ICmpWithKey }) => {
             className={styles.itemRight}
             onChange={(e) => {
               const value = +e.target.value || 0;
-              console.log(e.target.value, "sizeee");
               updateStyle(e, {
                 name: "fontSize",
                 value,
@@ -123,7 +122,6 @@ const EditCmp = ({ cmp }: { cmp: ICmpWithKey }) => {
           className={styles.itemRight}
           onChange={(e) => {
             const align = e.target.value;
-            console.log(align, "aaaa");
             let newStyle: Style = {};
             switch (align) {
               case "left":

@@ -32,7 +32,21 @@ const useEditStore = create<editStoreStatus & editStoreAction>()(
     canvasChangeHistoryIndex: 0,
   }))
 );
+// 应用模版
+export const addCanvasByTpl = (tpl: ICanvas) => {
+  useEditStore.setState((draft) => {
+    draft.canvas = {
+      id: null,
+      type: "content",
+      content: JSON.parse(tpl.content),
+      title: tpl.title + "副本",
+    };
+    draft.assembly = new Set();
+    recordCanvasChangeHistory(draft);
+  });
+};
 
+// 增删组件
 export const addCmp = (_cmp: ICmp) => {
   useEditStore.setState((draft) => {
     draft.canvas.content.cmps.push({ ..._cmp, key: getOnlyKey() });
@@ -444,7 +458,6 @@ function autoAlign(
   const distance = Math.abs(_distance);
   if (distance < showDiff) {
     const el = document.getElementById(lineId);
-    console.log(lineId, el, "eeeeee");
     if (el) {
       el.style.display = "block";
       adjustDomLine?.(el);
@@ -455,13 +468,18 @@ function autoAlign(
   }
 }
 
-export const updateSelectedCmpStyle = (_style: any) => {
+export const updateSelectedCmpStyle = (
+  _style: any,
+  isRecord: boolean = true
+) => {
   useEditStore.setState((draft) => {
     Object.assign(
       draft.canvas.content.cmps[Array.from(draft.assembly)[0]].style,
       _style
     );
-    recordCanvasChangeHistory(draft);
+    if (isRecord) {
+      recordCanvasChangeHistory(draft);
+    }
   });
 };
 

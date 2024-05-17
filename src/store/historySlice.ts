@@ -1,5 +1,5 @@
 import useEditStore from "./editStore";
-import { ICanvas, editStoreStatus } from "./editStoreType";
+import { editStoreStatus } from "./editStoreType";
 
 const maxCanvasHistory = 100;
 export const recordCanvasChangeHistory = (draft: editStoreStatus) => {
@@ -22,7 +22,6 @@ export const recordCanvasChangeHistory = (draft: editStoreStatus) => {
 
 export const goPrevCanvasHistory = () => {
   useEditStore.setState((draft) => {
-    console.log(draft.canvasChangeHistoryIndex, "iiii");
     if (draft.canvasChangeHistoryIndex <= 0) {
       return;
     }

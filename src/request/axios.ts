@@ -41,7 +41,6 @@ Axios.interceptors.response.use(
     } else {
       message.warning(res.data.msg || "信息有误，失败！");
     }
-    return res;
   },
   (err) => {
     if (err.config.hearders.globalLoading !== false) {

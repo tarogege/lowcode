@@ -5,6 +5,7 @@ import { defaultComponentStyle } from "src/utils/const";
 
 const defaultStyle = {
   ...defaultComponentStyle,
+  transform: 0,
   width: 170,
   height: 30,
   lineHeight: "30px",

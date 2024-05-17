@@ -1,6 +1,4 @@
-import React from "react";
-
-export const defaultComponentStyle: React.CSSProperties = {
+export const defaultComponentStyle = {
   position: "absolute",
   top: 0,
   left: 0,
@@ -10,5 +8,5 @@ export const defaultComponentStyle: React.CSSProperties = {
   borderStyle: "none",
   borderWidth: "0",
   borderColor: "#ffffff00",
-  //   transform: 0, //"rotate(0deg)"
+  transform: 0,
 };

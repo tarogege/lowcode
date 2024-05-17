@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import TextSider from "./TextSider";
 import ImgSider from "./ImgSider";
 import GraphSider from "./GraphSider";
+import TplSider from "./TplSider";
 
 export const isTxtCmp = 1;
 export const isImgCmp = 2;
 export const isGraphyCmp = 3;
+export const isTplCmp = 4;
 
 const LeftSide = () => {
   const [showSide, setShowSide] = useState(0);
@@ -22,7 +24,6 @@ const LeftSide = () => {
 
   useEffect(() => {
     const cancelShow = () => {
-      console.log("123");
       setShowSide(0);
     };
     document.getElementById("center")?.addEventListener("click", cancelShow);
@@ -35,6 +36,23 @@ const LeftSide = () => {
   return (
     <div className={styles.main}>
       <ul className={styles.cmps}>
+        <li
+          className={classNames(
+            styles.cmp,
+            showSide === isTplCmp ? styles.selected : ""
+          )}
+          onClick={() => _setShowSide(isTplCmp)}
+        >
+          <i
+            className={classNames(
+              "icon",
+              "iconfont",
+              "icon-wenben",
+              styles.cmpIcon
+            )}
+          ></i>
+          <span className={styles.cmpText}>模版</span>
+        </li>
         <li
           className={classNames(
             styles.cmp,
@@ -87,6 +105,7 @@ const LeftSide = () => {
           <span className={styles.cmpText}>图形</span>
         </li>
       </ul>
+      {showSide === isTplCmp && <TplSider />}
       {showSide === isTxtCmp && <TextSider />}
       {showSide === isImgCmp && <ImgSider />}
       {showSide === isGraphyCmp && <GraphSider />}

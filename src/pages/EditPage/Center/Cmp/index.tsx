@@ -23,10 +23,12 @@ const Cmp = (props: ICmpProps) => {
     }
   };
 
+  const transform = `rotate(${cmp.style.transform}deg)`;
+
   return (
     <div
       className={classNames(styles.main, isSelected && "selectedBorder")}
-      style={{ ...outStyle, zIndex: index }}
+      style={{ ...outStyle, transform, zIndex: index }}
       onClick={selectCmp}
       contentEditable={false}
     >

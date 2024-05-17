@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { recordCanvasChangeHistory_2 } from "src/store/historySlice.ts";
 import Menu from "../Menu/index.tsx";
 import AlignLines from "./AlignLines/index.tsx";
+import Rotate from "./Rotate/index.tsx";
 
 const EditBox = () => {
   const zoom = useZoomStore((state) => state.zoom);
@@ -59,7 +60,7 @@ const EditBox = () => {
   top -= 2;
   left -= 2;
 
-  console.log(right, height, top, left, "edit box position");
+  // console.log(right, height, top, left, "edit box position");
 
   const handleMoveCmp = (e) => {
     let x = e.pageX;
@@ -93,12 +94,16 @@ const EditBox = () => {
     document.addEventListener("mouseup", up);
   };
 
+  const transform = `rotate(${
+    size === 1 ? cmps[Array.from(assembly)[0]].style.transform : 0
+  }deg)`;
+
   return (
     <>
       {size === 1 && <AlignLines canvasStyle={canvasStyle} />}
       <div
         className={styles.main}
-        style={{ top, left, width, height, zIndex: 99999 }}
+        style={{ top, left, width, height, zIndex: 99999, transform }}
         onMouseDown={handleMoveCmp}
         onClick={(e) => {
           e.stopPropagation();
@@ -131,6 +136,9 @@ const EditBox = () => {
             />
           )}
         <StretchDots zoom={zoom} style={{ width, height }} />
+        {size === 1 && (
+          <Rotate zoom={zoom} selectedCmp={cmps[Array.from(assembly)[0]]} />
+        )}
       </div>
     </>
   );

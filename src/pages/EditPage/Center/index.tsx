@@ -10,10 +10,6 @@ import styles from "./index.module.less";
 import { useEffect } from "react";
 import Zoom from "./Zoom";
 import useZoomStore, { zoomIn, zoomOut } from "src/store/zoomStore";
-import {
-  goNextCanvasHistory,
-  goPrevCanvasHistory,
-} from "src/store/historySlice";
 
 const Center = () => {
   const zoom = useZoomStore((state) => state.zoom);

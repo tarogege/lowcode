@@ -12,6 +12,7 @@ import { useCanvasId } from "src/store/hooks";
 import EditBox from "../EditBox";
 import useZoomStore from "src/store/zoomStore";
 import { ICmpWithKey } from "src/store/editStoreType";
+import ReferenceLines from "../ReferenceLines";
 
 const Canvas = () => {
   const { canvas, assembly } = useEditStore();
@@ -78,6 +79,7 @@ const Canvas = () => {
       {cmps.map((_cmp, index) => (
         <Cmp cmp={_cmp} index={index} isSelected={assembly.has(index)} />
       ))}
+      <ReferenceLines canvasStyle={style} />
     </div>
   );
 };
