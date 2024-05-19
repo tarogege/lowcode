@@ -4,6 +4,7 @@ import { ICanvas } from "src/store/editStoreType";
 import { getTemplateListEnd } from "src/request/end";
 import Axios from "src/request/axios";
 import { addCanvasByTpl } from "src/store/editStore";
+import { Image } from "antd";
 
 const TplSider = () => {
   const [list, setList] = useState([]);
@@ -18,14 +19,14 @@ const TplSider = () => {
     fresh();
   }, []);
 
-  const onUseTpl = (item: ICanvas) => {
+  const onUseTpl = (item: any) => {
     addCanvasByTpl(item);
   };
 
   return (
     <div className={leftSideStyles.main}>
       <ul className={leftSideStyles.box}>
-        {list.map((item: ICanvas) => {
+        {list.map((item: any) => {
           return (
             <li
               className={leftSideStyles.item}
@@ -33,11 +34,12 @@ const TplSider = () => {
               key={item.id}
             >
               <div className={leftSideStyles.desc}>{item.title}</div>
-              <img
+              <Image
                 src={
                   // item.thumbnail?.header ||
-                  "https://www.bubucuo.cn/react-head.png"
+                  item.thumbnail?.full
                 }
+                fallback="https://www.bubucuo.cn/react-head.png"
                 alt={item.title}
               />
             </li>

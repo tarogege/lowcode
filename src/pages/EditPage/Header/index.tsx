@@ -80,6 +80,28 @@ const Header = () => {
   const clear = () => {
     clearCanvas();
   };
+
+  const saveAndDownload = async () => {
+    const onSuccess = (_id: number, isNew: boolean, res: any) => {
+      message.success("保存成功");
+
+      if (isNew) {
+        // 新增
+        navigate(`?id=${_id}`);
+      }
+
+      // 下载新图片
+      const imgHref = res?.thumbnail.full;
+      const el = document.createElement("a");
+      el.href = imgHref;
+      el.download = res?.title + ".png";
+      el.style.display = "none";
+      document.body.appendChild(el);
+      el.click();
+      document.body.removeChild(el);
+    };
+    await saveCanvas(onSuccess);
+  };
   return (
     <div className={styles.main}>
       <div className={styles.item}>
@@ -105,7 +127,7 @@ const Header = () => {
           )}
         ></span>
         <span className={styles.txt}>上一步</span>
-        <span className={styles.shortKey}>CMD+Z</span>
+        {/* <span className={styles.shortKey}>CMD+Z</span> */}
       </div>
       <div className={styles.item} onClick={goNext}>
         <span
@@ -117,13 +139,19 @@ const Header = () => {
           onClick={goNext}
         ></span>
         <span className={styles.txt}>下一步</span>
-        <span className={styles.shortKey}>CMD+Shift+Z</span>
+        {/* <span className={styles.shortKey}>CMD+Shift+Z</span> */}
       </div>
       <div className={styles.item} onClick={clear}>
         <span
           className={classNames("iconfont icon-qingkong", styles.icon)}
         ></span>
         <span className={styles.txt}>清空</span>
+      </div>
+      <div className={styles.item} onClick={saveAndDownload}>
+        <span
+          className={classNames("iconfont icon-cloud-download", styles.icon)}
+        ></span>
+        <span className={styles.txt}>保存并下载</span>
       </div>
     </div>
   );

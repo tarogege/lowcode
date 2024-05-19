@@ -16,6 +16,7 @@ interface ListItem {
   type?: string; //页面或模版
   title?: string;
   content?: string;
+  thumbnail?: { full: string };
   [key: string]: any;
 }
 
@@ -100,6 +101,16 @@ const ListPage = () => {
       render: (txt, item: ListItem) => {
         const label = item.type === "content" ? "页面" : "模版";
         return <div className="red">{label}</div>;
+      },
+    },
+    {
+      title: "显示",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      render: (src, item: ListItem) => {
+        return (
+          <img src={src.full} alt={item.title} height={60} width={60}></img>
+        );
       },
     },
     {

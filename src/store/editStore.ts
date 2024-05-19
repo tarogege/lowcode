@@ -95,7 +95,7 @@ export const clearCanvas = () => {
 };
 
 export const saveCanvas = async (
-  successCallback: (id: number, isNew: boolean) => void
+  successCallback: (id: number, isNew: boolean, res: any) => void
 ) => {
   const canvas = useEditStore.getState().canvas;
   const isNew = !canvas.id;
@@ -105,7 +105,7 @@ export const saveCanvas = async (
     title: canvas.title,
     content: JSON.stringify(canvas.content),
   });
-  successCallback(res?.id, isNew);
+  successCallback(res?.id, isNew, res);
   if (isNew) {
     useEditStore.setState((draft) => {
       draft.canvas.id = res.id;
