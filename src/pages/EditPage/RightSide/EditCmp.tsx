@@ -8,14 +8,29 @@ import {
   updateSelectedCmpValue,
 } from "src/store/editStore";
 import { isImgCmp, isTxtCmp } from "../LeftSide";
+import { Button, Space } from "antd";
 
+type Pair = { name: string; value: number | string };
 const EditCmp = ({ cmp }: { cmp: ICmpWithKey }) => {
-  const { value, style, type, onClick = "" } = cmp;
-  const updateStyle = (
-    e,
-    { name, value }: { name: string; value: number | string }
-  ) => {
-    updateSelectedCmpStyle({ [name]: value });
+  const { value, style, type } = cmp;
+  const updateStyle = (e, _pair: Pair | Array<Pair>) => {
+    const pair: Array<Pair> = Array.isArray(_pair) ? _pair : [_pair];
+    const newStyle: any = {};
+    pair.forEach((_item) => {
+      newStyle[_item.name] = _item.value;
+    });
+    updateSelectedCmpStyle(newStyle);
+  };
+  const handleAnimationStyleChange = (e, { value }: Pair) => {
+    console.log("1231231");
+    const newStyle: Style = {
+      animationName: value as string,
+      animationDuration: style.animationDuration || "1s",
+      animationDelay: style.animationDelay || "0",
+      animationPlayState: "running",
+      animationIterationCount: style.animationIterationCount || "infinite",
+    };
+    updateSelectedCmpStyle(newStyle);
   };
 
   return (
@@ -251,6 +266,101 @@ const EditCmp = ({ cmp }: { cmp: ICmpWithKey }) => {
       <Item label="点击跳转">
         <input className={styles.itemRight} />
       </Item>
+      <Item label="动画名称">
+        <select
+          className={styles.itemRight}
+          value={style.animationName || ""}
+          onChange={(e) => {
+            handleAnimationStyleChange(e, {
+              name: "animationName",
+              value: e.target.value,
+            });
+          }}
+        >
+          <option value="">无动画</option>
+          <option value="jello">jello</option>
+          <option value="toggle">toggle</option>
+          <option value="shake">shake</option>
+          <option value="wobble">wobble</option>
+        </select>
+      </Item>
+      {style.animationName && (
+        <>
+          <Item label="动画持续时间(s)">
+            <input
+              className={styles.itemRight}
+              type="number"
+              value={parseInt(style.animationDuration)}
+              onChange={(e) => {
+                e.stopPropagation();
+                updateStyle(e, {
+                  name: "animationDuration",
+                  value: parseInt(e.target.value) + "s",
+                });
+              }}
+            />
+          </Item>
+          <Item label="动画持续次数" tips="999表示无数次">
+            <input
+              className={styles.itemRight}
+              type="number"
+              value={
+                style.animationIterationCount === "infinite"
+                  ? 999
+                  : style.animationIterationCount
+              }
+              onChange={(e) => {
+                updateStyle(e, {
+                  name: "animationIterationCount",
+                  value:
+                    parseInt(e.target.value || 0) === 999 ? "infinite" : _value,
+                });
+              }}
+            />
+          </Item>
+          <Item label="动画延迟时间(s)">
+            <input
+              className={styles.itemRight}
+              type="number"
+              value={parseInt(style.animationDelay)}
+              onChange={(e) => {
+                updateStyle(e, {
+                  name: "animationDelay",
+                  value: e.target.value + "s",
+                });
+              }}
+            />
+          </Item>
+          <Item>
+            <Space>
+              <Button
+                onClick={(e) => {
+                  const _value = style.animationName as string;
+                  updateStyle(e, { name: "animationName", value: "" });
+                  setTimeout(() => {
+                    updateStyle(e, [
+                      { name: "animationName", value: _value },
+                      { name: "animationPlayState", value: "running" },
+                    ]);
+                  }, 0);
+                }}
+              >
+                重新演示动画
+              </Button>
+              <Button
+                onClick={(e) => {
+                  updateStyle(e, {
+                    name: "animationPlayState",
+                    value: "paused",
+                  });
+                }}
+              >
+                暂停动画
+              </Button>
+            </Space>
+          </Item>
+        </>
+      )}
     </div>
   );
 };

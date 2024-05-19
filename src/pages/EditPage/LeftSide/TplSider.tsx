@@ -35,6 +35,7 @@ const TplSider = () => {
             >
               <div className={leftSideStyles.desc}>{item.title}</div>
               <Image
+                preview={false}
                 src={
                   // item.thumbnail?.header ||
                   item.thumbnail?.full

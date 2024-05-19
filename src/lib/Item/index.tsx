@@ -5,13 +5,13 @@ export default function Item({
   children,
   tips,
 }: {
-  label: string;
-  children: JSX.Element;
+  label?: string;
+  children: JSX.Element | any;
   tips?: string;
 }) {
   return (
     <div className={styles.main}>
-      <label>{label}</label>
+      {label && <label>{label}</label>}
       {children}
       <p className={styles.tips}>{tips}</p>
     </div>

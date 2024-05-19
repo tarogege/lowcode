@@ -59,12 +59,6 @@ const Center = () => {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("keydown", selectAllCmps);
-    return () => {
-      document.removeEventListener("keydown", selectAllCmps);
-    };
-  }, []);
   return (
     <div
       id="center"
@@ -73,6 +67,7 @@ const Center = () => {
       onContextMenu={(e) => {
         e.preventDefault();
       }}
+      onKeyDown={selectAllCmps}
     >
       <Canvas />
       <Zoom />

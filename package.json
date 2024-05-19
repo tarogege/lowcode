@@ -26,6 +26,7 @@
     "@types/lodash": "^4.17.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
@@ -35,7 +36,6 @@
     "less": "^4.2.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
-    "vite-tsconfig-paths": "^4.3.2",
-    "@types/react-router-dom": "^5.3.3"
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }
