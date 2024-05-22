@@ -1,9 +1,9 @@
 import { pick } from "lodash";
-import { isGraphyCmp, isImgCmp } from "src/pages/EditPage/LeftSide";
 import { ICmpWithKey } from "src/store/editStoreType";
 import styles from "../index.module.less";
 import { setCmpSelected } from "src/store/editStore";
 import classNames from "classnames";
+import { isGraphyCmp, isImgCmp } from "src/utils/const";
 
 interface IItemProps {
   cmp: ICmpWithKey;

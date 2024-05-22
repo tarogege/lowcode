@@ -22,12 +22,13 @@ export interface ICmp {
 }
 
 export interface ICmpWithKey extends ICmp {
-  key: number;
+  key: string;
 }
 
 export type editStoreStatus = {
   canvas: ICanvas;
   assembly: Set<number>;
+  haveSavedCanvas: boolean;
   canvasChangeHistory: Array<{ canvas: ICanvas; assembly: Set<number> }>;
   canvasChangeHistoryIndex: number;
 };

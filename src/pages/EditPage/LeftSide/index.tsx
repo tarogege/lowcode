@@ -5,11 +5,7 @@ import TextSider from "./TextSider";
 import ImgSider from "./ImgSider";
 import GraphSider from "./GraphSider";
 import TplSider from "./TplSider";
-
-export const isTxtCmp = 1;
-export const isImgCmp = 2;
-export const isGraphyCmp = 3;
-export const isTplCmp = 4;
+import { isGraphyCmp, isImgCmp, isTplCmp, isTxtCmp } from "src/utils/const";
 
 const LeftSide = () => {
   const [showSide, setShowSide] = useState(0);

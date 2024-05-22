@@ -1,7 +1,6 @@
 import { addCmp } from "src/store/editStore";
 import leftSideStyles from "./leftSide.module.less";
-import { isGraphyCmp, isTxtCmp } from ".";
-import { defaultComponentStyle } from "src/utils/const";
+import { defaultComponentStyle, isGraphyCmp } from "src/utils/const";
 
 const defaultStyle = {
   ...defaultComponentStyle,

@@ -7,13 +7,13 @@ import styles from "./index.module.less";
 import StretchDots from "./StrechDots.tsx";
 import useZoomStore from "src/store/zoomStore.ts";
 import { throttle } from "lodash";
-import { isTxtCmp } from "../../LeftSide/index.tsx";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { useEffect, useState } from "react";
 import { recordCanvasChangeHistory_2 } from "src/store/historySlice.ts";
 import Menu from "../Menu/index.tsx";
 import AlignLines from "./AlignLines/index.tsx";
 import Rotate from "./Rotate/index.tsx";
+import { isTxtCmp } from "src/utils/const.ts";
 
 const EditBox = () => {
   const zoom = useZoomStore((state) => state.zoom);

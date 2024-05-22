@@ -1,8 +1,7 @@
 import useEditStore, {
   addCmp,
-  clearCanvas,
   fetchCanvas,
-  setAllCmpsSelected,
+  initCanvas,
   setCmpSelected,
 } from "src/store/editStore";
 import styles from "./index.module.less";
@@ -23,9 +22,10 @@ const Canvas = () => {
   useEffect(() => {
     if (id) {
       fetchCanvas(id);
-    } else {
-      clearCanvas();
     }
+    return () => {
+      initCanvas();
+    };
   }, []);
   const onDrop = (e) => {
     // 获取拖拽项的数据

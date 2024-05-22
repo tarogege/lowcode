@@ -1,9 +1,9 @@
 import { ICmpWithKey } from "src/store/editStoreType";
-import { isImgCmp, isTxtCmp } from "../../LeftSide";
 import { Img, Text } from "./CmpDetail";
 import styles from "./index.module.less";
 import { setCmpSelected, setCmpsSelected } from "src/store/editStore";
 import classNames from "classnames";
+import { isImgCmp, isTxtCmp } from "src/utils/const";
 interface ICmpProps {
   cmp: ICmpWithKey;
   index: number;
