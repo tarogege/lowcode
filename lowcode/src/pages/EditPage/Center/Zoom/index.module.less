@@ -1,0 +1,62 @@
+@size: 30px;
+.zoom {
+  position: fixed;
+  right: 400px;
+  bottom: 20px;
+
+  display: flex;
+  height: @size;
+  line-height: @size;
+  color: #500202;
+
+  li {
+    padding: 0 4px;
+  }
+
+  .icon {
+    width: @size;
+    height: @size;
+    background-color: #ffe331;
+    cursor: pointer;
+  }
+
+  .iconRight {
+    border-right: 1px solid gray;
+  }
+
+  .btn {
+    width: 100px;
+    padding-inline: 25px;
+    background-color: #ffe331;
+    cursor: pointer;
+  }
+
+  .num {
+    font-size: 12px;
+    input {
+      display: inline-block;
+      width: 50px;
+      border: none;
+      text-align: center;
+    }
+  }
+}
+
+.referenceLine {
+  position: fixed;
+  position: fixed;
+  right: 400px;
+  bottom: calc(20px + @size);
+  width: 100px;
+
+  li {
+    height: @size;
+    line-height: @size;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+
+    &:hover {
+      background-color: #ffe331;
+    }
+  }
+}

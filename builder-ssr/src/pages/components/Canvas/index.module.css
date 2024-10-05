@@ -1,0 +1,10 @@
+.main {
+  position: relative;
+  width: 100vw;
+}
+
+.canvas {
+  transform-origin: 0 0;
+  overflow: hidden;
+  margin: auto;
+}
