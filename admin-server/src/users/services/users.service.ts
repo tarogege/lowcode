@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { ConfigService } from '@nestjs/config';
-import { User } from './entities/user.mongo.entity';
+import { User } from '../entities/user.mongo.entity';
 import { MongoRepository } from 'typeorm';
 
 @Injectable()
