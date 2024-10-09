@@ -4,6 +4,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../entities/user.mongo.entity';
 import { MongoRepository } from 'typeorm';
+import { PaginationDto } from 'src/shared/dtos/pagination-params.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,8 +17,13 @@ export class UsersService {
     return this.configService.get<string>('database.url');
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(pagination: PaginationDto) {
+    const [data, count] = await this.userRepository.findAndCount({
+      order: { name: 'DESC' },
+      skip: pagination.page * pagination.pageSize,
+      take: pagination.pageSize,
+    });
+    return { data, count };
   }
 
   findOne(id: number) {

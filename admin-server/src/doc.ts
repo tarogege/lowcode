@@ -9,7 +9,7 @@ const generateDocument = (app: any) => {
     .addBearerAuth()
     .build(); // 增加鉴权功能.build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('/api/doc', app, document);
+  SwaggerModule.setup('', app, document);
 };
 
 export default generateDocument;
