@@ -3,6 +3,8 @@ import { PaginationDto } from 'src/shared/dtos/pagination-params.dto';
 import { MongoRepository } from 'typeorm';
 import { Content } from '../entities/content.mongo.entity';
 import { ContentDto } from '../dtos/content.dto';
+import puppeteer from 'puppeteer';
+import path from 'path';
 
 @Injectable()
 export class ContentService {
@@ -48,6 +50,10 @@ export class ContentService {
       // 更新画布
       await this.contentRepo.updateOne({ id }, { $set: contentDto });
     }
+
+    const thumbanail = await this.takeScreenshots(id);
+    contentDto.thumbnail = thumbanail;
+    await this.contentRepo.updateOne({ id }, { $set: contentDto });
     return contentDto;
   }
 
@@ -69,5 +75,42 @@ export class ContentService {
       take: pageSize,
     });
     return { data, count };
+  }
+
+  async takeScreenshots(id: number) {
+    const url = `http://builder.codebus.tech/?id=${id}`;
+    const host = 'http://template.codebus.tech/';
+    const prefix = `static/upload/`;
+    const imgPath = path.join(__dirname, '../../../..', prefix);
+    const thumbnailFileName = `thumb_header_${id}.png`;
+    const thumbnailFullFileName = `thumb_full_${id}.png`;
+    await this._runPuppteer(url, {
+      thumbnailFileName: imgPath + thumbnailFileName,
+      thumbnailFullFileName: imgPath + thumbnailFullFileName,
+    });
+
+    return {
+      header: host + prefix + thumbnailFileName,
+      full: host + prefix + thumbnailFullFileName,
+    };
+  }
+
+  private async _runPuppteer(
+    url,
+    { thumbnailFileName, thumbnailFullFileName },
+  ) {
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--lang=zh-CN'],
+      headless: true,
+    });
+    const page = await browser.newPage();
+    page.setViewport({ width: 750, height: 800 });
+    page.goto(url, { waitUntil: 'networkidle0' });
+
+    // 截图
+    await page.screenshot({ path: thumbnailFileName });
+    await page.screenshot({ path: thumbnailFullFileName });
+
+    await browser.close();
   }
 }
