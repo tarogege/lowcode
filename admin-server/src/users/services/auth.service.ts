@@ -1,4 +1,3 @@
-import { getUserInfo } from './../../../../lowcode/src/request/end';
 import { LoginDto } from './../dto/login.dto';
 import { MongoRepository } from 'typeorm';
 import { RegisterDto } from './../dto/register.dto';
