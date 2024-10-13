@@ -17,4 +17,7 @@ export class Content extends Common {
 
   @Column()
   userId?: ObjectId;
+
+  @Column()
+  thumbnail?: object;
 }
