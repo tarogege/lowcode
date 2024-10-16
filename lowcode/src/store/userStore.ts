@@ -21,7 +21,8 @@ export const login = async (values: any) => {
     user = { isLogin: true, name: res.name };
     docCookies.setItem("sessionId", res.sessionId);
   }
-  useUserStore.setState(user);
+  console.log(res, user, " uuu");
+  useUserStore.setState(() => user);
 };
 
 export const logout = async () => {
@@ -36,7 +37,7 @@ export const fetchUserInfo = async () => {
 
   const res = await Axios.get(getUserInfo);
   if (res) {
-    user = { isLogin: true, name: res.data.name };
+    user = { isLogin: true, name: res.name };
   }
 
   useUserStore.setState(() => user);

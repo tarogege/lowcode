@@ -9,6 +9,8 @@ const Login = () => {
   const { isLogin, name } = useUserStore();
   const loading = useGlobalStore((state) => state.loading);
 
+  console.log(isLogin, name, "uuuu");
+
   useEffect(() => {
     fetchUserInfo();
   }, []);

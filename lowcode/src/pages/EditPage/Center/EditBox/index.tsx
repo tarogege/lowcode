@@ -116,6 +116,8 @@ const EditBox = () => {
   // 边框加在外层
   width += 4;
   height += 4;
+  top -= 2;
+  left -= 2;
 
   const transform = `rotate(${
     size === 1 ? selectedCmp.style.transform : 0

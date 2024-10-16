@@ -22,7 +22,7 @@ export class LoggerService {
     this.context = newCtx;
   }
 
-  error(ctx: string, message: string, meta: Record<string, any>) {
+  error(ctx: string, message: string, meta?: Record<string, any>) {
     return this.logger.error({
       message,
       contextName: this.context,
@@ -31,7 +31,7 @@ export class LoggerService {
     });
   }
 
-  info(ctx: string, message: string, meta: Record<string, any>) {
+  info(ctx: string, message: string, meta?: Record<string, any>) {
     return this.logger.info({
       message,
       contextName: this.context,
@@ -40,7 +40,7 @@ export class LoggerService {
     });
   }
 
-  warn(ctx: string, message: string, meta: Record<string, any>) {
+  warn(ctx: string, message: string, meta?: Record<string, any>) {
     return this.logger.warn({
       message,
       contextName: this.context,
@@ -49,7 +49,7 @@ export class LoggerService {
     });
   }
 
-  debug(ctx: string, message: string, meta: Record<string, any>) {
+  debug(ctx: string, message: string, meta?: Record<string, any>) {
     return this.logger.debug({
       message,
       contextName: this.context,

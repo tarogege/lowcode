@@ -1,5 +1,5 @@
 import { Button, Card, Divider, Modal, Space, Table, message } from "antd";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "../../request/axios";
 import {
@@ -24,15 +24,15 @@ const ListPage = () => {
   const [list, setList] = useState([]);
   const editUrl = (item: ListItem) => `/?id=${item.id}&type=${item.type}`;
 
-  const fresh = async () => {
+  const fresh = useCallback(async () => {
     if (!isLogin) {
       return;
     }
     const res: any = await Axios.get(getCanvasListEnd);
-    const data = res.content || [];
+    const data = res.data || [];
 
     setList(data);
-  };
+  }, [isLogin]);
   const delConfirm = (id: number) => {
     Modal.confirm({
       title: "删除",
@@ -152,7 +152,8 @@ const ListPage = () => {
 
   useEffect(() => {
     fresh();
-  }, []);
+  }, [fresh]);
+
   return (
     <Card>
       <Link to={"/"}>新增</Link>

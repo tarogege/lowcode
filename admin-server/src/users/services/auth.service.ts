@@ -35,6 +35,7 @@ export class AuthService {
 
   async getUserInfo(id: string) {
     const userDb = await this.userRepo.findOneBy(id);
+    console.log(userDb, id, 'uu');
     return Object.assign({}, userDb);
   }
 

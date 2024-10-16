@@ -7,8 +7,11 @@ const generateDocument = (app: any) => {
     .setDescription(packageConfig.description)
     .setVersion(packageConfig.version)
     .addBearerAuth()
+    .addGlobalParameters()
     .build(); // 增加鉴权功能.build();
-  const document = SwaggerModule.createDocument(app, options);
+  const document = SwaggerModule.createDocument(app, options, {
+    ignoreGlobalPrefix: false,
+  });
   SwaggerModule.setup('', app, document);
 };
 

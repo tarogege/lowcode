@@ -17,6 +17,7 @@ export const DatabaseProviders = [
         password: configService.get<string>('database.pass'),
         database: configService.get<string>('database.name'),
         entities: [path.join(__dirname, `../../**/*.mongo.entity{.ts,.js}`)],
+        // entities: [Content, User],
         logging: configService.get<boolean>('database.logging'),
         synchronize: configService.get<boolean>('database.synchronize'),
       };

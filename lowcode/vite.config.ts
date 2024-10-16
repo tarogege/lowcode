@@ -7,7 +7,9 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   server: {
     proxy: {
-      "/api": "http://template.codebus.tech",
+      "/api": {
+        target: "http://localhost:3000",
+      },
       "/static": "http://template.codebus.tech",
     },
   },

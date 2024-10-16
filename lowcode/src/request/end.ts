@@ -3,11 +3,11 @@ import axios from "./axios";
 export const end = ""; //"//template.josephxia.com";
 
 // 注册 post
-export const registerEnd = end + "/api/register";
+export const registerEnd = end + "/api/auth/register";
 
 // 用户信息
-export const getUserInfo = end + "/api/info";
-export const loginEnd = end + "/api/login";
+export const getUserInfo = end + "/api/auth";
+export const loginEnd = end + "/api/auth/login";
 export const logoutEnd = end + "/api/logout";
 
 // 画布信息

@@ -3,8 +3,8 @@ import { PaginationDto } from 'src/shared/dtos/pagination-params.dto';
 import { MongoRepository } from 'typeorm';
 import { Content } from '../entities/content.mongo.entity';
 import { ContentDto } from '../dtos/content.dto';
-import puppeteer from 'puppeteer';
-import path from 'path';
+import * as puppeteer from 'puppeteer';
+const path = require('path');
 
 @Injectable()
 export class ContentService {
@@ -30,11 +30,13 @@ export class ContentService {
     return { data, count };
   }
 
-  async findOne(id: string) {
-    return await this.contentRepo.findOneBy({
-      _id: Number.parseInt(id),
+  async findOne(id: number) {
+    const content = await this.contentRepo.findOneBy({
+      // @ts-ignore
+      id: Number.parseInt(id),
       isDelete: false,
     });
+    return content;
   }
 
   async saveOne(contentDto: Partial<ContentDto>) {
@@ -51,7 +53,7 @@ export class ContentService {
       await this.contentRepo.updateOne({ id }, { $set: contentDto });
     }
 
-    const thumbanail = await this.takeScreenshots(id);
+    const thumbanail = await this.takeScreenshots(contentDto.id);
     contentDto.thumbnail = thumbanail;
     await this.contentRepo.updateOne({ id }, { $set: contentDto });
     return contentDto;
@@ -78,6 +80,7 @@ export class ContentService {
   }
 
   async takeScreenshots(id: number) {
+    // TODO: need to update url
     const url = `http://builder.codebus.tech/?id=${id}`;
     const host = 'http://template.codebus.tech/';
     const prefix = `static/upload/`;
@@ -100,7 +103,11 @@ export class ContentService {
     { thumbnailFileName, thumbnailFullFileName },
   ) {
     const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--lang=zh-CN'],
+      args: [
+        '--no-sandbox',
+        '--lang=zh-CN',
+        '--disable-features=site-per-process',
+      ],
       headless: true,
     });
     const page = await browser.newPage();
@@ -109,8 +116,9 @@ export class ContentService {
 
     // 截图
     await page.screenshot({ path: thumbnailFileName });
-    await page.screenshot({ path: thumbnailFullFileName });
+    await page.screenshot({ path: thumbnailFullFileName, fullPage: true });
 
-    await browser.close();
+    // FIXME:
+    // await browser.close();
   }
 }

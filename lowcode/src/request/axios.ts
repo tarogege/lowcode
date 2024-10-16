@@ -28,7 +28,7 @@ Axios.interceptors.response.use(
     if (res.config.headers.globalLoading !== false) {
       hideLoading();
     }
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       let code = res.data.code;
       if (code === 200) {
         return res.data.result;

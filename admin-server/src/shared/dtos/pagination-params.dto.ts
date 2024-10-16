@@ -4,7 +4,7 @@ import { Transform } from 'class-transformer';
 
 export class PaginationDto {
   @ApiPropertyOptional({
-    example: 5,
+    example: 20,
     type: Number,
     description: 'pagesize default 20',
   })

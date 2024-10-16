@@ -32,6 +32,8 @@ export default function EditBoxOfMultiCmps({
   let { top, left, width, height } = computeBoxStyle(cmps, assembly);
   width += 4;
   height += 4;
+  top -= 2;
+  left -= 2;
 
   return (
     <>
