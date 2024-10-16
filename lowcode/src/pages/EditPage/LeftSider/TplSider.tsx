@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import leftSideStyles from "./leftSide.module.less";
-import { settings } from "./tpl";
 import Axios from "../../../request/axios";
 import { getTemplateListEnd } from "../../../request/end";
 import { addCanvasByTpl } from "../../../store/editStore";

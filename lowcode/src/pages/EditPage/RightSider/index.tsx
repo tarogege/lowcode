@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import styles from "./index.module.less";
 import useEditStore from "../../../store/editStore";
 import EditCanvas from "./EditCanvas";
@@ -32,7 +32,7 @@ const RightSider = () => {
         ) : size === 1 && !isGroup ? (
           <EditCmp
             selectedCmp={canvas.content.cmps[Array.from(assembly)[0]]}
-            formKeys={canvas.content.formKeys}
+            formKeys={canvas.content.formKeys as string[]}
           />
         ) : (
           <EditMultiCmp isGroup={isGroup} />

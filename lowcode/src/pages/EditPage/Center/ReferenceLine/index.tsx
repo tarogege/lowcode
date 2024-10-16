@@ -24,13 +24,13 @@ const ReferenceLine = memo(({ canvasStyle, zoom }: IReferenceLineProps) => {
     top: 114 + 1,
     left:
       document.body.clientWidth / 2 -
-      ((canvasStyle.width + 2) / 2) * (zoom / 100),
+      (((canvasStyle.width as number) + 2) / 2) * (zoom / 100),
   };
 
-  const onMouseDown = (e) => {
+  const onMouseDown = (e: any) => {
     const { key, index, direction } = e.target.dataset;
 
-    const move = (innerE) => {
+    const move = (innerE: any) => {
       // 区分方向，区分是set还是clear
       const cX = innerE.pageX;
       const cY = innerE.pageY;
@@ -38,13 +38,13 @@ const ReferenceLine = memo(({ canvasStyle, zoom }: IReferenceLineProps) => {
         disY = (cY - canvasDomPos.top) * (100 / zoom);
 
       if (direction === "x") {
-        if (disY < 0 || disY > canvasStyle.height) {
+        if (disY < 0 || disY > (canvasStyle.height as number)) {
           clearReferenceLineX(parseInt(index), key);
         } else {
           setReferenceLineX(index, disY);
         }
       } else {
-        if (disX < 0 || disX > canvasStyle.width) {
+        if (disX < 0 || disX > (canvasStyle.width as number)) {
           clearReferenceLineY(parseInt(index), key);
         } else {
           setReferenceLineY(index, disX);

@@ -13,7 +13,7 @@ import { useState } from "react";
 const Zoom = () => {
   const zoom = useZoomStore((state) => state.zoom);
   const [showReferenceLine, setShowReferenceLine] = useState(false);
-  const changeZoom = (e) => {
+  const changeZoom = (e: any) => {
     setZoom(e.target.value);
   };
   return (

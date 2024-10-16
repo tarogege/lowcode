@@ -45,9 +45,9 @@ const GraphSider = () => {
           <li
             key={item.key}
             className={leftSideStyles.item}
-            onClick={() => onClick(item)}
+            onClick={() => onClick(item as any)}
             draggable={true}
-            onDragStart={(e) => onDragStart(e, item)}
+            onDragStart={(e) => onDragStart(e, item as any)}
             style={{
               width: item.style.width,
               height: item.style.height,

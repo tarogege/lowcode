@@ -28,7 +28,7 @@ const showDiff = 12;
 const adjustDiff = 3;
 
 const useEditStore = create(
-  immer<EditStoreState & EditStoreAction>((set) => ({
+  immer<EditStoreState & EditStoreAction>(() => ({
     canvas: getDefaultCanvas(),
     hasSavedCanvas: true,
     assembly: new Set(),
@@ -94,7 +94,7 @@ export function addGroup(store: IEditStore, group: any) {
     groupCmpKeys: [],
     formKey: getStoreFormKey(store, group),
   };
-  children.forEach((child) => {
+  children.forEach((child: ICmpWithKey) => {
     const newChild: ICmpWithKey = {
       ...child,
       style: {
@@ -251,12 +251,13 @@ export const updateAssemblyCmpStyle = (newStyle: Style, isAlign?: boolean) => {
       for (const key in newStyle) {
         if (
           (key === "width" || key === "height") &&
-          selectedCmp.style[key] + newStyle[key] < 2
+          (selectedCmp.style[key] as number) + (newStyle[key] as number) < 2
         ) {
           invalid = true;
           break;
         }
 
+        // @ts-ignore
         selectedCmp.style[key] += newStyle[key];
       }
 
@@ -345,8 +346,10 @@ export const updateSelectedCmpAttr = (name: string, value: string | object) => {
   useEditStore.setState((draft) => {
     const selectedIndex = selectedCmpIndexSelector(draft);
     if (typeof value === "object") {
+      // @ts-ignore
       Object.assign(draft.canvas.content.cmps[selectedIndex][name], value);
     } else {
+      // @ts-ignore
       draft.canvas.content.cmps[selectedIndex][name] = value;
     }
 
@@ -361,12 +364,16 @@ export const editAssemblyStyle = (_style: Style) => {
     draft.assembly.forEach((idx) => {
       const _s = draft.canvas.content.cmps[idx].style;
       if (_style.right === 0) {
+        // @ts-ignore
         _s.left = draft.canvas.content.style.width - _s.width;
       } else if (_style.bottom === 0) {
+        // @ts-ignore
         _s.top = draft.canvas.content.style.height - _s.height;
       } else if (_style.left === "center") {
+        // @ts-ignore
         _s.left = (draft.canvas.content.style.width - _s.width) / 2;
       } else if (_style.top === "center") {
+        // @ts-ignore
         _s.top = (draft.canvas.content.style.height - _s.height) / 2;
       } else {
         Object.assign(_s, _style);
@@ -430,7 +437,7 @@ export const deleteSelectedCmps = () => {
       const del = newAssembly.has(index);
       if (del) {
         // 如果这个组件是组合子组件
-        let groupKey = cmp.groupKey;
+        const groupKey = cmp.groupKey;
 
         if (groupKey) {
           const groupIndex = map.get(cmp.groupKey);
@@ -486,7 +493,9 @@ export const deleteSelectedCmps = () => {
 const _copyCmp = (cmp: ICmpWithKey): ICmpWithKey => {
   const newItem = cloneDeep(cmp);
   newItem.key = getOnlyKey();
+  // @ts-ignore
   newItem.style.left += 40;
+  // @ts-ignore
   newItem.style.top += 40;
 
   return newItem;
@@ -507,7 +516,7 @@ export const addAssemblyCmps = () => {
     const newCmps: Array<ICmpWithKey> = [];
     const cmps = draft.canvas.content.cmps;
     const map = getCmpsMap(cmps);
-    let newAssembly: Set<number> = new Set();
+    const newAssembly: Set<number> = new Set();
     let i = cmps.length;
 
     draft.assembly.forEach((index) => {
@@ -665,50 +674,59 @@ export const subZIndex = () => {
 export const alignToCanvas = (canvasStyle: Style, selectedCmp: ICmpWithKey) => {
   // 对齐x中轴
   autoAlign(
-    selectedCmp.style.top +
-      selectedCmp.style.height / 2 -
-      canvasStyle.height / 2,
+    (selectedCmp.style.top as number) +
+      (selectedCmp.style.height as number) / 2 -
+      (canvasStyle.height as number) / 2,
     "centerXLine",
     () => {
       selectedCmp.style.top = Math.abs(
-        (selectedCmp.style.height - canvasStyle.height) / 2
+        ((selectedCmp.style.height as number) -
+          (canvasStyle.height as number)) /
+          2
       );
     }
   );
   // 对齐y中轴
   autoAlign(
-    selectedCmp.style.left +
-      selectedCmp.style.width / 2 -
-      canvasStyle.width / 2,
+    (selectedCmp.style.left as number) +
+      (selectedCmp.style.width as number) / 2 -
+      (canvasStyle.width as number) / 2,
     "centerYLine",
     () => {
       selectedCmp.style.left = Math.abs(
-        (selectedCmp.style.width - canvasStyle.width) / 2
+        ((selectedCmp.style.width as number) - (canvasStyle.width as number)) /
+          2
       );
     }
   );
   // 对齐top
-  autoAlign(selectedCmp.style.top, "canvasLineTop", () => {
+  autoAlign(selectedCmp.style.top as number, "canvasLineTop", () => {
     selectedCmp.style.top = 0;
   });
   // 对齐bottom
   autoAlign(
-    canvasStyle.height - selectedCmp.style.top - selectedCmp.style.height,
+    (canvasStyle.height as number) -
+      (selectedCmp.style.top as number) -
+      (selectedCmp.style.height as number),
     "canvasLineBottom",
     () => {
-      selectedCmp.style.top = canvasStyle.height - selectedCmp.style.height;
+      selectedCmp.style.top =
+        (canvasStyle.height as number) - (selectedCmp.style.height as number);
     }
   );
   // 对齐right
   autoAlign(
-    selectedCmp.style.left + selectedCmp.style.width - canvasStyle.width,
+    (selectedCmp.style.left as number) +
+      (selectedCmp.style.width as number) -
+      (canvasStyle.width as number),
     "canvasLineRight",
     () => {
-      selectedCmp.style.left = canvasStyle.width - selectedCmp.style.width;
+      selectedCmp.style.left =
+        (canvasStyle.width as number) - (selectedCmp.style.width as number);
     }
   );
   // 对齐left
-  autoAlign(selectedCmp.style.left, "canvasLineLeft", () => {
+  autoAlign(selectedCmp.style.left as number, "canvasLineLeft", () => {
     selectedCmp.style.left = 0;
   });
 };
@@ -722,180 +740,224 @@ export const alignToCmp = (
   // 被选中组件 / 目标组件
   // bottom top
   autoAlign(
-    targetCmpStyle.top - selectedCmp.style.top - selectedCmp.style.height,
+    (targetCmpStyle.top as number) -
+      (selectedCmp.style.top as number) -
+      (selectedCmp.style.height as number),
     "lineTop",
     () => {
-      selectedCmp.style.top = targetCmpStyle.top - selectedCmp.style.height;
+      selectedCmp.style.top =
+        (targetCmpStyle.top as number) - (selectedCmp.style.height as number);
     },
     (domLine) => {
-      domLine.style.top = targetCmpStyle.top + "px";
-      domLine.style.left = 0 + "px";
-      domLine.style.width = canvasStyle.width + "px";
+      domLine!.style.top = targetCmpStyle.top + "px";
+      domLine!.style.left = 0 + "px";
+      domLine!.style.width = canvasStyle.width + "px";
     }
   );
   // top top
   autoAlign(
-    selectedCmp.style.top - targetCmpStyle.top,
+    (selectedCmp.style.top as number) - (targetCmpStyle.top as number),
     "lineTop",
     () => {
       selectedCmp.style.top = targetCmpStyle.top;
     },
     (domLine) => {
-      domLine.style.top = targetCmpStyle.top + "px";
-      domLine.style.left = 0 + "px";
-      domLine.style.width = canvasStyle.width + "px";
+      domLine!.style.top = targetCmpStyle.top + "px";
+      domLine!.style.left = 0 + "px";
+      domLine!.style.width = canvasStyle.width + "px";
     }
   );
   // bottom bottom
   autoAlign(
-    targetCmpStyle.top +
-      targetCmpStyle.height -
-      selectedCmp.style.top -
-      selectedCmp.style.height,
+    (targetCmpStyle.top as number) +
+      (targetCmpStyle.height as number) -
+      (selectedCmp.style.top as number) -
+      (selectedCmp.style.height as number),
     "lineBottom",
     () => {
       selectedCmp.style.top =
-        targetCmpStyle.top + targetCmpStyle.height - selectedCmp.style.height;
+        (targetCmpStyle.top as number) +
+        (targetCmpStyle.height as number) -
+        (selectedCmp.style.height as number);
     },
     (domLine) => {
-      domLine.style.top = targetCmpStyle.top + targetCmpStyle.height + "px";
-      domLine.style.left = 0 + "px";
-      domLine.style.width = canvasStyle.width + "px";
+      domLine!.style.top =
+        (targetCmpStyle.top as number) +
+        (targetCmpStyle.height as number) +
+        "px";
+      domLine!.style.left = 0 + "px";
+      domLine!.style.width = canvasStyle.width + "px";
     }
   );
   // top bottom
   autoAlign(
-    selectedCmp.style.top - targetCmpStyle.top - targetCmpStyle.height,
+    (selectedCmp.style.top as number) -
+      (targetCmpStyle.top as number) -
+      (targetCmpStyle.height as number),
     "lineBottom",
     () => {
-      selectedCmp.style.top = targetCmpStyle.top + targetCmpStyle.height;
+      selectedCmp.style.top =
+        (targetCmpStyle.top as number) + (targetCmpStyle.height as number);
     },
     (domLine) => {
-      domLine.style.top = targetCmpStyle.top + targetCmpStyle.height + "px";
-      domLine.style.left = 0 + "px";
-      domLine.style.width = canvasStyle.width + "px";
+      domLine!.style.top =
+        (targetCmpStyle.top as number) +
+        (targetCmpStyle.height as number) +
+        "px";
+      domLine!.style.left = 0 + "px";
+      domLine!.style.width = canvasStyle.width + "px";
     }
   );
   // right left
   autoAlign(
-    targetCmpStyle.left - selectedCmp.style.left - selectedCmp.style.width,
+    (targetCmpStyle.left as number) -
+      (selectedCmp.style.left as number) -
+      (selectedCmp.style.width as number),
     "lineLeft",
     () => {
-      selectedCmp.style.left = targetCmpStyle.left - selectedCmp.style.width;
+      selectedCmp.style.left =
+        (targetCmpStyle.left as number) - (selectedCmp.style.width as number);
     },
     (domLine) => {
-      domLine.style.top = 0 + "px";
-      domLine.style.left = targetCmpStyle.left + "px";
-      domLine.style.height = canvasStyle.height + "px";
+      domLine!.style.top = 0 + "px";
+      domLine!.style.left = targetCmpStyle.left + "px";
+      domLine!.style.height = canvasStyle.height + "px";
     }
   );
   // left left
   autoAlign(
-    selectedCmp.style.left - targetCmpStyle.left,
+    (selectedCmp.style.left as number) - (targetCmpStyle.left as number),
     "lineLeft",
     () => {
       selectedCmp.style.left = targetCmpStyle.left;
     },
     (domLine) => {
-      domLine.style.top = 0 + "px";
-      domLine.style.left = targetCmpStyle.left + "px";
-      domLine.style.height = canvasStyle.height + "px";
+      domLine!.style.top = 0 + "px";
+      domLine!.style.left = targetCmpStyle.left + "px";
+      domLine!.style.height = canvasStyle.height + "px";
     }
   );
   // right right
   autoAlign(
-    targetCmpStyle.left +
-      targetCmpStyle.width -
-      selectedCmp.style.left -
-      selectedCmp.style.width,
+    (targetCmpStyle.left as number) +
+      (targetCmpStyle.width as number) -
+      (selectedCmp.style.left as number) -
+      (selectedCmp.style.width as number),
     "lineRight",
     () => {
       selectedCmp.style.left =
-        targetCmpStyle.left + targetCmpStyle.width - selectedCmp.style.width;
+        (targetCmpStyle.left as number) +
+        (targetCmpStyle.width as number) -
+        (selectedCmp.style.width as number);
     },
     (domLine) => {
-      domLine.style.top = 0 + "px";
-      domLine.style.left = targetCmpStyle.left + targetCmpStyle.width + "px";
-      domLine.style.height = canvasStyle.height + "px";
+      domLine!.style.top = 0 + "px";
+      domLine!.style.left =
+        (targetCmpStyle.left as number) +
+        (targetCmpStyle.width as number) +
+        "px";
+      domLine!.style.height = canvasStyle.height + "px";
     }
   );
   // left right
   autoAlign(
-    selectedCmp.style.left - targetCmpStyle.left - targetCmpStyle.width,
+    (selectedCmp.style.left as number) -
+      (targetCmpStyle.left as number) -
+      (targetCmpStyle.width as number),
     "lineRight",
     () => {
-      selectedCmp.style.left = targetCmpStyle.left + targetCmpStyle.width;
+      selectedCmp.style.left =
+        (targetCmpStyle.left as number) + (targetCmpStyle.width as number);
     },
     (domLine) => {
-      domLine.style.top = 0 + "px";
-      domLine.style.left = targetCmpStyle.left + targetCmpStyle.width + "px";
-      domLine.style.height = canvasStyle.height + "px";
+      domLine!.style.top = 0 + "px";
+      domLine!.style.left =
+        (targetCmpStyle.left as number) +
+        (targetCmpStyle.width as number) +
+        "px";
+      domLine!.style.height = canvasStyle.height + "px";
     }
   );
   // bottom xcenter
   autoAlign(
-    targetCmpStyle.top +
-      targetCmpStyle.height / 2 -
-      selectedCmp.style.top -
-      selectedCmp.style.height,
+    (targetCmpStyle.top as number) +
+      (targetCmpStyle.height as number) / 2 -
+      (selectedCmp.style.top as number) -
+      (selectedCmp.style.height as number),
     "lineX",
     () => {
       selectedCmp.style.top =
-        targetCmpStyle.top +
-        targetCmpStyle.height / 2 -
-        selectedCmp.style.height;
+        (targetCmpStyle.top as number) +
+        (targetCmpStyle.height as number) / 2 -
+        (selectedCmp.style.height as number);
     },
     (domLine) => {
-      domLine.style.top = targetCmpStyle.top + targetCmpStyle.height / 2 + "px";
-      domLine.style.left = 0 + "px";
-      domLine.style.width = canvasStyle.width + "px";
+      domLine!.style.top =
+        (targetCmpStyle.top as number) +
+        (targetCmpStyle.height as number) / 2 +
+        "px";
+      domLine!.style.left = 0 + "px";
+      domLine!.style.width = canvasStyle.width + "px";
     }
   );
   // top xcenter
   autoAlign(
-    selectedCmp.style.top - targetCmpStyle.top - targetCmpStyle.height / 2,
+    (selectedCmp.style.top as number) -
+      (targetCmpStyle.top as number) -
+      (targetCmpStyle.height as number) / 2,
     "lineX",
     () => {
-      selectedCmp.style.top = targetCmpStyle.top + targetCmpStyle.height / 2;
+      selectedCmp.style.top =
+        (targetCmpStyle.top as number) + (targetCmpStyle.height as number) / 2;
     },
     (domLine) => {
-      domLine.style.top = targetCmpStyle.top + targetCmpStyle.height / 2 + "px";
-      domLine.style.left = 0 + "px";
-      domLine.style.width = canvasStyle.width + "px";
+      domLine!.style.top =
+        (targetCmpStyle.top as number) +
+        (targetCmpStyle.height as number) / 2 +
+        "px";
+      domLine!.style.left = 0 + "px";
+      domLine!.style.width = canvasStyle.width + "px";
     }
   );
   // right ycenter
   autoAlign(
-    targetCmpStyle.left +
-      targetCmpStyle.width / 2 -
-      selectedCmp.style.left -
-      selectedCmp.style.width,
+    (targetCmpStyle.left as number) +
+      (targetCmpStyle.width as number) / 2 -
+      (selectedCmp.style.left as number) -
+      (selectedCmp.style.width as number),
     "lineY",
     () => {
       selectedCmp.style.left =
-        targetCmpStyle.left +
-        targetCmpStyle.width / 2 -
-        selectedCmp.style.width;
+        (targetCmpStyle.left as number) +
+        (targetCmpStyle.width as number) / 2 -
+        (selectedCmp.style.width as number);
     },
     (domLine) => {
-      domLine.style.top = 0 + "px";
-      domLine.style.left =
-        targetCmpStyle.left + targetCmpStyle.width / 2 + "px";
-      domLine.style.height = canvasStyle.height + "px";
+      domLine!.style.top = 0 + "px";
+      domLine!.style.left =
+        (targetCmpStyle.left as number) +
+        (targetCmpStyle.width as number) / 2 +
+        "px";
+      domLine!.style.height = canvasStyle.height + "px";
     }
   );
   // left ycenter
   autoAlign(
-    selectedCmp.style.left - targetCmpStyle.left - targetCmpStyle.width / 2,
+    (selectedCmp.style.left as number) -
+      (targetCmpStyle.left as number) -
+      (targetCmpStyle.width as number) / 2,
     "lineY",
     () => {
-      selectedCmp.style.left = targetCmpStyle.left + targetCmpStyle.width / 2;
+      selectedCmp.style.left =
+        (targetCmpStyle.left as number) + (targetCmpStyle.width as number) / 2;
     },
     (domLine) => {
-      domLine.style.top = 0 + "px";
-      domLine.style.left =
-        targetCmpStyle.left + targetCmpStyle.width / 2 + "px";
-      domLine.style.height = canvasStyle.height + "px";
+      domLine!.style.top = 0 + "px";
+      domLine!.style.left =
+        (targetCmpStyle.left as number) +
+        (targetCmpStyle.width as number) / 2 +
+        "px";
+      domLine!.style.height = canvasStyle.height + "px";
     }
   );
 };
@@ -909,7 +971,7 @@ export const autoAlign = (
   const _distance = Math.abs(distance);
   const domLine = document.getElementById(domLineId);
   if (_distance < showDiff) {
-    domLine.style.display = "block";
+    domLine!.style.display = "block";
     adjustDomLine?.(domLine);
   }
   if (_distance < adjustDiff) {
@@ -941,6 +1003,7 @@ export const groupCmps = () => {
     const parent: ICmpWithKey = {
       key: getOnlyKey(),
       type: isGroupComponent,
+      // @ts-ignore
       style: {
         ...defaultComponentStyle_0,
         top,

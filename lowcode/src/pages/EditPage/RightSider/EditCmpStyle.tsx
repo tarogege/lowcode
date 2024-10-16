@@ -34,10 +34,10 @@ export default function EditCmpStyle({
   handleAttributesChange,
 }: Props) {
   const handleAnimationStyleChange = (
-    e: any, //目前没有用到
-    { name, value }: { name: string; value: string | number }
+    _: any, //目前没有用到
+    { value }: { name: string; value: string | number }
   ) => {
-    let newStyle = {
+    const newStyle: any = {
       animationName: value,
       animationIterationCount:
         styleValue.animationIterationCount == undefined
@@ -153,7 +153,7 @@ export default function EditCmpStyle({
             <input
               type="number"
               className={styles.itemRight}
-              value={parseInt(styleValue.lineHeight)}
+              value={parseInt(styleValue.lineHeight as string)}
               onChange={(e) => {
                 handleAttributesChange({
                   [styleName]: {
@@ -184,7 +184,7 @@ export default function EditCmpStyle({
             <InputColor
               className={styles.itemRight}
               color={styleValue.color}
-              onChangeComplete={(e) =>
+              onChangeComplete={(e: any) =>
                 handleAttributesChange({
                   [styleName]: {
                     color: `rgba(${Object.values(e.rgb).join(",")})`,
@@ -291,7 +291,7 @@ export default function EditCmpStyle({
           <InputColor
             className={styles.itemRight}
             color={styleValue.backgroundColor}
-            onChangeComplete={(e) => {
+            onChangeComplete={(e: any) => {
               handleAttributesChange({
                 [styleName]: {
                   backgroundColor: `rgba(${Object.values(e.rgb).join(",")})`,
@@ -349,7 +349,7 @@ export default function EditCmpStyle({
                 <input
                   type="number"
                   className={styles.itemRight}
-                  value={parseInt(styleValue.animationDuration)}
+                  value={parseInt(styleValue.animationDuration as string)}
                   onChange={(e) => {
                     handleAttributesChange({
                       [styleName]: {
@@ -385,7 +385,7 @@ export default function EditCmpStyle({
                 <input
                   className={styles.itemRight}
                   type="number"
-                  value={parseInt(styleValue.animationDelay)}
+                  value={parseInt(styleValue.animationDelay as string)}
                   onChange={(e) => {
                     handleAttributesChange({
                       [styleName]: {
@@ -397,7 +397,7 @@ export default function EditCmpStyle({
               </Item>
               <button
                 className={styles.pauseAnimation}
-                onClick={(e) => {
+                onClick={() => {
                   const value = styleValue.animationName;
 
                   handleAttributesChange({
@@ -421,7 +421,7 @@ export default function EditCmpStyle({
 
               <button
                 className={styles.pauseAnimation}
-                onClick={(e) => {
+                onClick={() => {
                   handleAttributesChange({
                     [styleName]: {
                       animationPlayState: "paused",

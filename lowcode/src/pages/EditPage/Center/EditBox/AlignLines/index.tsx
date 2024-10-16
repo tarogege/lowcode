@@ -31,12 +31,22 @@ const AlignLines = ({ canvasStyle }: IAlignLinesProps) => {
       />
       {/* x中轴 */}
       <Line
-        style={{ width, left: 0, top: height / 2, backgroundColor: "red" }}
+        style={{
+          width,
+          left: 0,
+          top: (height as number) / 2,
+          backgroundColor: "red",
+        }}
         id="centerXLine"
       />
       {/* y中轴 */}
       <Line
-        style={{ height, left: width / 2, top: 0, backgroundColor: "red" }}
+        style={{
+          height,
+          left: (width as number) / 2,
+          top: 0,
+          backgroundColor: "red",
+        }}
         id="centerYLine"
       />
 

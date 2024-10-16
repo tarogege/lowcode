@@ -26,7 +26,7 @@ export const login = async (values: any) => {
 };
 
 export const logout = async () => {
-  let user = { ...initialUserStore };
+  const user = { ...initialUserStore };
   await Axios.post(logoutEnd);
   docCookies.removeItem("sessionId");
   useUserStore.setState(user);
@@ -35,7 +35,7 @@ export const logout = async () => {
 export const fetchUserInfo = async () => {
   let user = { ...initialUserStore };
 
-  const res = await Axios.get(getUserInfo);
+  const res: any = await Axios.get(getUserInfo);
   if (res) {
     user = { isLogin: true, name: res.name };
   }

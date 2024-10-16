@@ -1,4 +1,3 @@
-import { update } from "lodash";
 import useEditStore, {
   addZIndex,
   bottomZIndex,
@@ -9,10 +8,6 @@ import useEditStore, {
   topZIndex,
   updateAssemblyCmpStyle,
 } from "../../../store/editStore";
-import {
-  goNextCanvasHistory,
-  goPrevCanvasHistory,
-} from "../../../store/historySlice";
 import useZoomStore, { zoomIn, zoomOut } from "../../../store/zoomStore";
 import Canvas from "./Canvas";
 import Zoom from "./Zoom";
@@ -20,13 +15,14 @@ import styles from "./index.module.less";
 const Center = () => {
   const canvas = useEditStore((state) => state.canvas);
   const zoom = useZoomStore((state) => state.zoom);
-  const cancelSelect = (e) => {
+
+  const cancelSelect = (e: any) => {
     if (e.target.id.indexOf("cmp") === -1) {
       setCmpSelected(-1);
     }
   };
 
-  const onkeydown = (e) => {
+  const onkeydown = (e: any) => {
     if ((e.target as Element).nodeName === "TEXTAREA") {
       return;
     }
@@ -88,7 +84,9 @@ const Center = () => {
       id="center"
       tabIndex={0}
       className={styles.main}
-      style={{ minHeight: (canvas.content.style.height * zoom) / 100 + 100 }}
+      style={{
+        minHeight: ((canvas.content.style.height as number) * zoom) / 100 + 100,
+      }}
       onClick={cancelSelect}
       onKeyDown={onkeydown}
       onContextMenu={(e) => {

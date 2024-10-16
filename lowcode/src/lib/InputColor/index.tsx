@@ -11,7 +11,7 @@ export default function InputColor({ onChangeComplete, color, ...rest }: any) {
         backgroundColor: color,
       }}
       {...rest}
-      onClick={(e) => {
+      onClick={() => {
         if (!visible) {
           setVisible(true);
         }
@@ -42,7 +42,7 @@ export default function InputColor({ onChangeComplete, color, ...rest }: any) {
               color: "#999",
               cursor: "pointer",
             }}
-            onClick={(e) => {
+            onClick={() => {
               setVisible(false);
             }}
           >

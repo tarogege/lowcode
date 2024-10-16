@@ -1,7 +1,6 @@
 import { Link, unstable_usePrompt, useNavigate } from "react-router-dom";
 import styles from "./index.module.less";
 import classNames from "classnames";
-import { useCanvasId, useCanvasType } from "../../../store/hooks";
 import useEditStore, {
   clearCanvas,
   saveCanvas,
@@ -15,8 +14,6 @@ import { useEffect } from "react";
 
 const Header = () => {
   const hasSavedCanvas = useEditStore((state) => state.hasSavedCanvas);
-  const id = useCanvasId();
-  const type = useCanvasType();
   const navigate = useNavigate();
 
   unstable_usePrompt({
@@ -49,7 +46,7 @@ const Header = () => {
     clearCanvas();
   };
 
-  const keyDown = (e) => {
+  const keyDown = (e: any) => {
     if ((e.target as Element).nodeName === "TEXTAREA") {
       return;
     }

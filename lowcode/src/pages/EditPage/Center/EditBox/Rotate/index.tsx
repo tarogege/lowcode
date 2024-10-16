@@ -12,15 +12,15 @@ interface IRotateProps {
 
 const Rotate = ({ selectedCmp, zoom }: IRotateProps) => {
   const { height, transform } = selectedCmp.style;
-  const onRotate = (e) => {
+  const onRotate = (e: any) => {
     e.stopPropagation();
     const pX = e.pageX,
       pY = e.pageY;
 
     //   起始点从水平转化为垂直，so + 90
-    const angle = ((transform + 90) * Math.PI) / 180;
+    const angle = (((transform as any) + 90) * Math.PI) / 180;
 
-    const radius = height / 2;
+    const radius = (height as number) / 2;
     const [offsetX, offsetY] = [
       -Math.cos(angle) * radius,
       -Math.sin(angle) * radius,
@@ -36,6 +36,7 @@ const Rotate = ({ selectedCmp, zoom }: IRotateProps) => {
 
       const deg = Math.ceil((180 / Math.PI) * Math.atan2(disY, disX) - 90);
 
+      // @ts-ignore
       updateSelectedCmpStyle({ transform: deg }, false);
     }, 50);
     const up = () => {

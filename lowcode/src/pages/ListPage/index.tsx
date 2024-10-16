@@ -112,7 +112,7 @@ const ListPage = () => {
     {
       title: "操作",
       dataIndex: "action",
-      render: (value, item: ListItem) => {
+      render: (_: any, item: ListItem) => {
         const { id } = item;
         return (
           <Space size="middle">

@@ -25,7 +25,7 @@ const Cmp = ({ index, cmp, isSelected }: ICmpProps) => {
 
   const { position, left, top, width, height, ...innerStyle } = style;
 
-  const setSelected = (e) => {
+  const setSelected = (e: any) => {
     e.stopPropagation();
     if (e.metaKey) {
       setCmpsSelected([index]);

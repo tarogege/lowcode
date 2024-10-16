@@ -30,22 +30,26 @@ const Menu = ({ style, assemblySize, cmps, selectedIndex }: IMenuProps) => {
   const overlap = (cmp: ICmpWithKey): boolean => {
     const selectedCmpStyle = {
       top: selectedCmp.style.top,
-      right: selectedCmp.style.left + selectedCmp.style.width,
-      bottom: selectedCmp.style.top + selectedCmp.style.height,
+      right:
+        (selectedCmp.style.left as number) +
+        (selectedCmp.style.width as number),
+      bottom:
+        (selectedCmp.style.top as number) +
+        (selectedCmp.style.height as number),
       left: selectedCmp.style.left,
     };
     const cmpStyle = {
       left: cmp.style.left,
-      right: cmp.style.left + cmp.style.width,
-      bottom: cmp.style.top + cmp.style.height,
+      right: (cmp.style.left as number) + (cmp.style.width as number),
+      bottom: (cmp.style.top as number) + (cmp.style.height as number),
       top: cmp.style.top,
     };
 
     return !(
-      cmpStyle.right < selectedCmpStyle.left ||
-      cmpStyle.top > selectedCmpStyle.bottom ||
-      cmpStyle.left > selectedCmpStyle.right ||
-      cmpStyle.bottom < selectedCmpStyle.top
+      cmpStyle.right < (selectedCmpStyle.left as number) ||
+      (cmpStyle.top as number) > (selectedCmpStyle.bottom as number) ||
+      (cmpStyle.left as number) > (selectedCmpStyle.right as number) ||
+      cmpStyle.bottom < (selectedCmpStyle.top as number)
     );
   };
 

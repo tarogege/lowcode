@@ -62,7 +62,7 @@ const EditBox = () => {
       recordCanvasHistory_2();
       //   鼠标抬起时，隐藏所有吸附线
       document.querySelectorAll(".alignLine").forEach((item) => {
-        item.style.display = "none";
+        (item as any).style.display = "none";
       });
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
@@ -72,7 +72,7 @@ const EditBox = () => {
     document.addEventListener("mouseup", up);
   };
 
-  const onDoubleClick = (e) => {
+  const onDoubleClick = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
     if (selectedCmp.type & isGroupComponent) {
@@ -80,7 +80,7 @@ const EditBox = () => {
         top: 114 + 1,
         left:
           document.body.clientWidth / 2 -
-          ((canvasStyle.width + 2) / 2) * (zoom / 100),
+          (((canvasStyle.width as number) + 2) / 2) * (zoom / 100),
       };
       const relativePosition = {
         top: e.pageY - canvasDomPos.top,
@@ -92,15 +92,15 @@ const EditBox = () => {
         if (cmp.groupKey !== selectedCmp.key) {
           continue;
         }
-        let { top, left, width, height } = cmps[i].style;
+        const { top, left, width, height } = cmps[i].style;
 
-        const right = left + width,
-          bottom = top + height;
+        const right = (left as number) + (width as number),
+          bottom = (top as number) + (height as number);
         if (
-          relativePosition.top >= top &&
-          relativePosition.top <= bottom &&
-          relativePosition.left >= left &&
-          relativePosition.left <= right
+          relativePosition.top >= (top as number) &&
+          relativePosition.top <= (bottom as number) &&
+          relativePosition.left >= (left as number) &&
+          relativePosition.left <= (right as number)
         ) {
           // 选中子节点
           setCmpSelected(i);
@@ -114,9 +114,13 @@ const EditBox = () => {
 
   let { top, left, width, height } = selectedCmp.style;
   // 边框加在外层
+  // @ts-ignore
   width += 4;
+  // @ts-ignore
   height += 4;
+  // @ts-ignore
   top -= 2;
+  // @ts-ignore
   left -= 2;
 
   const transform = `rotate(${
@@ -142,8 +146,8 @@ const EditBox = () => {
         onMouseDown={onMouseDown}
         onClick={(e) => e.stopPropagation()}
         onDoubleClick={onDoubleClick}
-        onContextMenu={(e) => setShowMenu(true)}
-        onMouseLeave={(e) => {
+        onContextMenu={() => setShowMenu(true)}
+        onMouseLeave={() => {
           setTextareaFocus(false);
           setShowMenu(false);
         }}
@@ -151,9 +155,9 @@ const EditBox = () => {
         {showMenu && (
           <Menu
             style={{
-              left: width - 2,
+              left: (width as number) - 2,
               transform: `rotate(${
-                size === 1 ? -selectedCmp.style.transform : 0
+                size === 1 ? -(selectedCmp.style.transform as any) : 0
               } deg)`,
               transformOrigin: "0% 0%",
             }}
@@ -165,6 +169,7 @@ const EditBox = () => {
         {selectedCmp.type === isTextComponent && textareaFocus && (
           <TextareaAutosize
             value={selectedCmp.value}
+            // @ts-ignore
             style={{ ...selectedCmp.style, top: 0, left: 0 }}
             onChange={(e) => {
               const newValue = e.target.value;

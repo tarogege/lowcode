@@ -206,7 +206,7 @@ const FormSider = () => {
         </select>
       </Item>
       <ul className={leftSideStyles.box}>
-        {settings.map((item) => (
+        {settings.map((item: any) => (
           <li
             key={item.key}
             className={leftSideStyles.item}

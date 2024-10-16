@@ -6,6 +6,7 @@ import {
   groupCmps,
 } from "../../../store/editStore";
 import styles from "./edit.module.less";
+import { Style } from "../../../store/editStoreTypes";
 
 interface IEditMultiCmpProps {
   isGroup: boolean;
@@ -14,7 +15,7 @@ interface IEditMultiCmpProps {
 const EditMultiCmp = ({ isGroup }: IEditMultiCmpProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const align = e.target.value;
-    let newStyle: Style = {};
+    const newStyle: Style = {};
     switch (align) {
       case "left":
         newStyle.left = 0;

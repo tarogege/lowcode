@@ -50,7 +50,7 @@ const ImgSider = () => {
   return (
     <div className={leftSideStyles.main}>
       <ul className={leftSideStyles.box}>
-        {settings.map((item) => (
+        {settings.map((item: any) => (
           <li
             key={item.value}
             className={leftSideStyles.item}

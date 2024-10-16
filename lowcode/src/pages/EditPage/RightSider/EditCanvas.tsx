@@ -5,7 +5,7 @@ import { ICanvas, Style } from "../../../store/editStoreTypes";
 import styles from "./edit.module.less";
 
 const EditCanvas = ({ canvas }: { canvas: ICanvas }) => {
-  const onCanvasStyleChange = (e, _style: Style) => {
+  const onCanvasStyleChange = (_: any, _style: Style) => {
     updateCanvasStyle(_style);
   };
 
@@ -45,7 +45,7 @@ const EditCanvas = ({ canvas }: { canvas: ICanvas }) => {
         <InputColor
           className={styles.itemRight}
           color={canvas.content.style.backgroundColor}
-          onChangeComplete={(e) =>
+          onChangeComplete={(e: any) =>
             onCanvasStyleChange(e, {
               backgroundColor: `rgba(${Object.values(e.rgb).join(",")})`,
             })

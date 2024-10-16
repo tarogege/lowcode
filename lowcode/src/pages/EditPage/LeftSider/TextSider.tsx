@@ -50,9 +50,9 @@ const TextSider = () => {
           <li
             key={item.value}
             className={leftSideStyles.item}
-            onClick={() => onClick(item)}
+            onClick={() => onClick(item as any)}
             draggable={true}
-            onDragStart={(e) => onDragStart(e, item)}
+            onDragStart={(e) => onDragStart(e, item as any)}
           >
             {item.value.indexOf("双击编辑") > -1
               ? item.value.slice(4)

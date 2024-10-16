@@ -26,10 +26,16 @@ export const computeBoxStyle = (
 
   assembly.forEach((selected) => {
     const cmp = cmps[selected];
-    top = Math.min(cmp.style.top, top);
-    left = Math.min(cmp.style.left, left);
-    right = Math.max(cmp.style.left + cmp.style.width, right);
-    bottom = Math.max(cmp.style.top + cmp.style.height, bottom);
+    top = Math.min(cmp.style.top as number, top);
+    left = Math.min(cmp.style.left as number, left);
+    right = Math.max(
+      (cmp.style.left as number) + (cmp.style.width as number),
+      right
+    );
+    bottom = Math.max(
+      (cmp.style.top as number) + (cmp.style.height as number),
+      bottom
+    );
   });
 
   const width = right - left;

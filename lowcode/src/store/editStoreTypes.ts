@@ -22,6 +22,7 @@ export type ISubmit = {
 };
 
 export interface ICmp {
+  // @ts-ignore
   type: number;
   style: Style;
   value?: string;

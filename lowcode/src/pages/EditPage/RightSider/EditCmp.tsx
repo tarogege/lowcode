@@ -16,8 +16,7 @@ export default function EditCmp({
   selectedCmp: ICmpWithKey;
   formKeys: Array<string>;
 }) {
-  const { value, style, onClick, formKey, formItemName, inputType } =
-    selectedCmp;
+  const { value, style, onClick, formKey, formItemName } = selectedCmp;
 
   const handleAttributesChange: HandleAttributesChangeType = (obj) => {
     Object.keys(obj).forEach((key) => {

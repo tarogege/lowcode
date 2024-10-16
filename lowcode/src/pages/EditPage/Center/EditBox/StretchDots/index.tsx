@@ -13,7 +13,7 @@ const StretchDots = (props: IStretchDotsProps) => {
   const { zoom, style } = props;
   const { width, height, transform } = style;
 
-  const onScale = (e) => {
+  const onScale = (e: any) => {
     const direction = e.target.dataset.direction;
     if (!direction) {
       return;
@@ -70,7 +70,7 @@ const StretchDots = (props: IStretchDotsProps) => {
         className={styles.stretchDot}
         data-direction="top"
         style={{
-          left: width / 2 - 9,
+          left: (width as number) / 2 - 9,
           top: -9,
           transform,
           cursor: "row-resize",
@@ -81,7 +81,7 @@ const StretchDots = (props: IStretchDotsProps) => {
         className={styles.stretchDot}
         data-direction="top right"
         style={{
-          left: width - 11,
+          left: (width as number) - 11,
           top: -9,
           transform,
           cursor: "nesw-resize",
@@ -93,8 +93,8 @@ const StretchDots = (props: IStretchDotsProps) => {
         className={styles.stretchDot}
         data-direction="right"
         style={{
-          left: width - 11,
-          top: height / 2 - 11,
+          left: (width as number) - 11,
+          top: (height as number) / 2 - 11,
           transform,
           cursor: "col-resize",
         }}
@@ -104,8 +104,8 @@ const StretchDots = (props: IStretchDotsProps) => {
         className={styles.stretchDot}
         data-direction="right bottom"
         style={{
-          left: width - 11,
-          top: height - 11,
+          left: (width as number) - 11,
+          top: (height as number) - 11,
           transform,
           cursor: "nwse-resize",
         }}
@@ -116,8 +116,8 @@ const StretchDots = (props: IStretchDotsProps) => {
         className={styles.stretchDot}
         data-direction="bottom"
         style={{
-          left: width / 2 - 11,
-          top: height - 11,
+          left: (width as number) / 2 - 11,
+          top: (height as number) - 11,
           transform,
           cursor: "row-resize",
         }}
@@ -128,7 +128,7 @@ const StretchDots = (props: IStretchDotsProps) => {
         data-direction="bottom left"
         style={{
           left: -9,
-          top: height - 11,
+          top: (height as number) - 11,
           transform,
           cursor: "nesw-resize",
         }}
@@ -140,7 +140,7 @@ const StretchDots = (props: IStretchDotsProps) => {
         data-direction="left"
         style={{
           left: -9,
-          top: height / 2 - 11,
+          top: (height as number) / 2 - 11,
           transform,
           cursor: "col-resize",
         }}
