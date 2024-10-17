@@ -1,3 +1,4 @@
+import { LoggerService } from './../../shared/logger/logger.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { PaginationDto } from 'src/shared/dtos/pagination-params.dto';
 import { MongoRepository } from 'typeorm';
@@ -11,6 +12,7 @@ export class ContentService {
   constructor(
     @Inject('CONTENT_REPOSITORY')
     private readonly contentRepo: MongoRepository<Content>,
+    private readonly loggerService: LoggerService,
   ) {}
 
   async getCanvasesList(userId: string, pageDto: PaginationDto) {
@@ -119,6 +121,7 @@ export class ContentService {
     await page.screenshot({ path: thumbnailFullFileName, fullPage: true });
 
     // FIXME:
-    // await browser.close();
+    await page.close();
+    await browser.close();
   }
 }
