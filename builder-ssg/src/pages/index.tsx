@@ -12,7 +12,7 @@ export default function Home() {
 
       <main>
         <div className="err">
-          id 信息有误，请检查之后重新输入，或者微信联系作者「bubucuo_sy」
+          id 信息有误，请检查之后重新输入
         </div>
       </main>
     </>

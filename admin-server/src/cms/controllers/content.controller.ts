@@ -75,4 +75,6 @@ export class ContentController {
   async remove(@Body() dto) {
     await this.contentService.remove(dto.id);
   }
+
+  // TODO: publish
 }

@@ -55,8 +55,8 @@ export class ContentService {
       await this.contentRepo.updateOne({ id }, { $set: contentDto });
     }
 
-    const thumbanail = await this.takeScreenshots(contentDto.id);
-    contentDto.thumbnail = thumbanail;
+    // const thumbanail = await this.takeScreenshots(contentDto.id);
+    // contentDto.thumbnail = thumbanail;
     await this.contentRepo.updateOne({ id }, { $set: contentDto });
     return contentDto;
   }
@@ -111,10 +111,11 @@ export class ContentService {
         '--disable-features=site-per-process',
       ],
       headless: true,
+      pipe: true,
     });
     const page = await browser.newPage();
-    page.setViewport({ width: 750, height: 800 });
-    page.goto(url, { waitUntil: 'networkidle0' });
+    await page.setViewport({ width: 750, height: 800 });
+    await page.goto(url, { waitUntil: 'networkidle0' });
 
     // 截图
     await page.screenshot({ path: thumbnailFileName });

@@ -8,7 +8,7 @@ export default function ID({ data }: any) {
         <Canvas canvas={JSON.parse(data.content)} />
       ) : (
         <div className="err">
-          id 信息有误，请检查之后重新输入，或者微信联系作者「bubucuo_sy」
+          id 信息有误，请检查之后重新输入
         </div>
       )}
     </ClientOnly>

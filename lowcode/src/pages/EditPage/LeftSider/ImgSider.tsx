@@ -2,7 +2,12 @@ import { addCmp } from "../../../store/editStore";
 import { ICmp } from "../../../store/editStoreTypes";
 import { defaultComponentStyle, isImgComponent } from "../../../utils/const";
 import leftSideStyles from "./leftSide.module.less";
-import { imgs } from "../../../consts/index";
+import img1 from "../../../assets/1.jpeg";
+import img2 from "../../../assets/2.jpeg";
+import img3 from "../../../assets/3.jpeg";
+import img4 from "../../../assets/bg1.jpg";
+import img5 from "../../../assets/bg2.jpg";
+import img6 from "../../../assets/bg3.jpg";
 
 const defaultStyle = {
   ...defaultComponentStyle,
@@ -10,23 +15,27 @@ const defaultStyle = {
 
 const settings: any = [
   {
-    value: imgs[0],
+    value: img1,
     style: defaultStyle,
   },
   {
-    value: imgs[1],
+    value: img2,
     style: defaultStyle,
   },
   {
-    value: imgs[2],
+    value: img3,
     style: defaultStyle,
   },
   {
-    value: imgs[4],
+    value: img4,
     style: defaultStyle,
   },
   {
-    value: imgs[5],
+    value: img5,
+    style: defaultStyle,
+  },
+  {
+    value: img6,
     style: defaultStyle,
   },
 ];
