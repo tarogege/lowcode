@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "http://lowcodeserver.dearmaomao.cn",
       },
       "/static": "http://template.codebus.tech",
     },

@@ -12,7 +12,7 @@ const RightSider = () => {
     state.canvas,
   ]);
   const size = assembly.size;
-  const [showEdit, setShowEdit] = useState(false);
+  const [showEdit, setShowEdit] = useState(true);
 
   //   判断是否是组合组件
   const isGroup =

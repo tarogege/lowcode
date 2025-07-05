@@ -17,8 +17,9 @@ const useUserStore = create<UserStoreState>(() => ({
 export const login = async (values: any) => {
   let user = { ...initialUserStore };
   const res: any = await Axios.post(loginEnd, values);
+  // res: { sessionId, user: {..} }
   if (res) {
-    user = { isLogin: true, name: res.name };
+    user = { isLogin: true, name: res.user.name };
     docCookies.setItem("sessionId", res.sessionId);
   }
   console.log(res, user, " uuu");
@@ -37,7 +38,7 @@ export const fetchUserInfo = async () => {
 
   const res: any = await Axios.get(getUserInfo);
   if (res) {
-    user = { isLogin: true, name: res.name };
+    user = { isLogin: true, name: res.user.name };
   }
 
   useUserStore.setState(() => user);

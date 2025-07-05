@@ -2,6 +2,7 @@ import { addCmp } from "../../../store/editStore";
 import { ICmp } from "../../../store/editStoreTypes";
 import { defaultComponentStyle, isImgComponent } from "../../../utils/const";
 import leftSideStyles from "./leftSide.module.less";
+import { imgs } from "../../../consts/index";
 
 const defaultStyle = {
   ...defaultComponentStyle,
@@ -9,28 +10,23 @@ const defaultStyle = {
 
 const settings: any = [
   {
-    value:
-      "https://i2.imgs.ovh/d/BQACAgEAAx0EUvSR8wACKuxmwuSZaMJgrTZ7AAEveyZTg1bSNVoAAg0FAAL0lBlGEfwZZlDElq01BA",
+    value: imgs[0],
     style: defaultStyle,
   },
   {
-    value:
-      "https://i2.imgs.ovh/d/BQACAgEAAx0EUvSR8wACKu5mwuSa2S-AvPcXZ17E3U3m5He2HQACDwUAAvSUGUZ7sLf4xRFTkzUE",
+    value: imgs[1],
     style: defaultStyle,
   },
   {
-    value:
-      "https://i2.imgs.ovh/d/BQACAgEAAx0EUvSR8wACKu1mwuSZjtBNVBZFgFDEBvx9mPqruwACDgUAAvSUGUbSoPWRkCqAiDUE",
+    value: imgs[2],
     style: defaultStyle,
   },
   {
-    value:
-      "https://i2.imgs.ovh/d/BQACAgEAAx0EUvSR8wACKu9mwuSaQEunj5PffrV1gN7-tb0KqAACEAUAAvSUGUbcktuEsqH2rjUE",
+    value: imgs[4],
     style: defaultStyle,
   },
   {
-    value:
-      "https://i2.imgs.ovh/d/BQACAgEAAx0EUvSR8wACKvBmwuScqpOb2Uh09Q9GHy5SykqKVAACEQUAAvSUGUbATNeOVwe9aTUE",
+    value: imgs[5],
     style: defaultStyle,
   },
 ];
