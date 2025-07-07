@@ -22,7 +22,9 @@ export const getStaticPaths = async () => {
   const data = (await res.json()) ||{result: {data: []}};
 
   return {
-    paths: data.result.data.map((item: string) => "/" + item),
+    paths: data.result.data.map((item: any) => {
+      return {params: {id: item.id + '' || "2"}}
+    }),
     fallback: true,
   };
 };
@@ -39,7 +41,7 @@ export async function getStaticProps({ params }: { params: { id: string } }) {
 
   return {
     props: {
-      data: !data.result.isDelete && data.result,
+      data: (data.result && !data.result.isDelete ) ? data.result : null,
     },
   };
 }
