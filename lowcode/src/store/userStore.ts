@@ -22,7 +22,6 @@ export const login = async (values: any) => {
     user = { isLogin: true, name: res.user.name };
     docCookies.setItem("sessionId", res.sessionId);
   }
-  console.log(res, user, " uuu");
   useUserStore.setState(() => user);
 };
 

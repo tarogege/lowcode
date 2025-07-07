@@ -17,12 +17,12 @@ export default function ID({ data }: any) {
 
 export const getStaticPaths = async () => {
   const res = await fetch(
-    "http://template.codebus.tech/api/web/content/publishList"
+    "http://localhost:3000/api/web/template/list",
   );
-  const data = await res.json();
+  const data = (await res.json()) ||{result: {data: []}};
 
   return {
-    paths: data.result.map((item: string) => "/" + item),
+    paths: data.result.data.map((item: string) => "/" + item),
     fallback: true,
   };
 };
@@ -33,13 +33,13 @@ export const getStaticPaths = async () => {
 // 此函数在服务端的构建阶段调用，不会在客户端调用，因此这里相当于是直接查询数据库 SSG
 export async function getStaticProps({ params }: { params: { id: string } }) {
   const res = await fetch(
-    "http://template.codebus.tech/api/web/content/get?id=" + (params.id || 2)
+    "http://localhost:3000/api/web/content/get?id=" + (params.id || 2)
   );
   const data = await res.json();
 
   return {
     props: {
-      data: data.result.publish && !data.result.isDelete && data.result,
+      data: !data.result.isDelete && data.result,
     },
   };
 }

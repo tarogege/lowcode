@@ -46,7 +46,6 @@ const fetch = async ({ url, afterSuccess, popMsg, link }: any, params: any) => {
 
 const Cmp = memo(({ cmp, index }: { cmp: ICmpWithKey; index: number }) => {
   const { type, style, value, onClick, formKey } = cmp;
-  console.log(cmp, "cmp");
 
   const transform = `rotate(${style.transform}deg)`;
 

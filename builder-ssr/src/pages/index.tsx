@@ -3,7 +3,6 @@ import ClientOnly from "./components/ClientOnly";
 import Canvas from "./components/Canvas";
 
 export default function Home({ data }: any) {
-  console.log(data, "data");
   return (
     <>
       <Head>

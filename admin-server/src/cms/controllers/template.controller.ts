@@ -1,5 +1,5 @@
 import { ContentService } from './../services/content.service';
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { PaginationDto } from 'src/shared/dtos/pagination-params.dto';
 
@@ -9,7 +9,7 @@ export class TemplateController {
 
   @ApiOperation({ summary: '获取所有模版类型画布' })
   @Get('list')
-  async findAll(pageDto: PaginationDto) {
+  async findAll(@Query() pageDto: PaginationDto) {
     return await this.contentService.findAllTemplate(pageDto);
   }
 }
