@@ -43,5 +43,6 @@ export async function getStaticProps({ params }: { params: { id: string } }) {
     props: {
       data: (data.result && !data.result.isDelete ) ? data.result : null,
     },
+    revalidate: false, // 关闭自动 ISR，改为 on-demand revalidate
   };
 }

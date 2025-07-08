@@ -9,6 +9,8 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as COS from 'cos-nodejs-sdk-v5';
+import { HttpService } from '@nestjs/axios';
+
 
 // TODO: need to store it in configService
 const cos = new COS({
@@ -22,7 +24,8 @@ export class ContentService {
     @Inject('CONTENT_REPOSITORY')
     private readonly contentRepo: MongoRepository<Content>,
     private readonly loggerService: LoggerService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly httpService: HttpService
   ) {}
 
   async getCanvasesList(userId: string, pageDto: PaginationDto) {
@@ -54,7 +57,8 @@ export class ContentService {
   async saveOne(contentDto: Partial<ContentDto>) {
     const { id } = contentDto;
     const has = await this.contentRepo.findOneBy({ id });
-    if (!id || !has) {
+    const isCreate = !id || !has
+    if (isCreate) {
       // 创建新画布
       const count = await this.contentRepo.count();
       contentDto.id = count + 1;
@@ -66,6 +70,10 @@ export class ContentService {
     }
     const thumbanail = await this.takeScreenshotsAndUpload(contentDto.id);
     contentDto.thumbnail = thumbanail;
+    if(!isCreate) {
+      // update的时候，需要给nextjs发送请求，更新ssg生产的html页面
+      this.httpService.get(`${process.env.BUILDER_HOST}/api/revalidate?id=${id}`)
+    }
     await this.contentRepo.updateOne({ id }, { $set: contentDto });
     return contentDto;
   }
