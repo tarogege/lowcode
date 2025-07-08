@@ -5,7 +5,16 @@ import { MongoRepository } from 'typeorm';
 import { Content } from '../entities/content.mongo.entity';
 import { ContentDto } from '../dtos/content.dto';
 import * as puppeteer from 'puppeteer';
-const path = require('path');
+import { ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as COS from 'cos-nodejs-sdk-v5';
+
+// TODO: need to store it in configService
+const cos = new COS({
+  SecretId: process.env.COS_SECRET_ID,
+  SecretKey: process.env.COS_SECRET_KEY,
+});
 
 @Injectable()
 export class ContentService {
@@ -13,6 +22,7 @@ export class ContentService {
     @Inject('CONTENT_REPOSITORY')
     private readonly contentRepo: MongoRepository<Content>,
     private readonly loggerService: LoggerService,
+    private readonly configService: ConfigService
   ) {}
 
   async getCanvasesList(userId: string, pageDto: PaginationDto) {
@@ -54,9 +64,8 @@ export class ContentService {
       // 更新画布
       await this.contentRepo.updateOne({ id }, { $set: contentDto });
     }
-
-    // const thumbanail = await this.takeScreenshots(contentDto.id);
-    // contentDto.thumbnail = thumbanail;
+    const thumbanail = await this.takeScreenshotsAndUpload(contentDto.id);
+    contentDto.thumbnail = thumbanail;
     await this.contentRepo.updateOne({ id }, { $set: contentDto });
     return contentDto;
   }
@@ -81,22 +90,70 @@ export class ContentService {
     return { data, count };
   }
 
-  async takeScreenshots(id: number) {
-    // TODO: need to update url
-    const url = `http://builder.codebus.tech/?id=${id}`;
-    const host = 'http://template.codebus.tech/';
-    const prefix = `static/upload/`;
-    const imgPath = path.join(__dirname, '../../../..', prefix);
+  async takeScreenshotsAndUpload(id: number) {
+    const url = `${process.env.BUILDER_HOST}/${id}`;
+    const tmpDir = '/tmp/';
     const thumbnailFileName = `thumb_header_${id}.png`;
     const thumbnailFullFileName = `thumb_full_${id}.png`;
+    const localHeaderPath = path.join(tmpDir, thumbnailFileName);
+    const localFullPath = path.join(tmpDir, thumbnailFullFileName);
+
     await this._runPuppteer(url, {
-      thumbnailFileName: imgPath + thumbnailFileName,
-      thumbnailFullFileName: imgPath + thumbnailFullFileName,
+      thumbnailFileName: localHeaderPath,
+      thumbnailFullFileName: localFullPath,
     });
 
+    // 上传到 COS
+    const cosHeaderPath = `template/${thumbnailFileName}`;
+    const cosFullPath = `template/${thumbnailFullFileName}`;
+    const Bucket = process.env.COS_BUCKET; // 例如 'your-bucket-123456'
+    const Region = process.env.COS_REGION; // 例如 'ap-shanghai'
+
+    // 上传头图
+    const headerPromise = new Promise((resolve, reject) => {
+      cos.putObject(
+        {
+          Bucket,
+          Region,
+          Key: cosHeaderPath,
+          Body: fs.createReadStream(localHeaderPath),
+          ContentType: 'image/png',
+        },
+        (err, data) => {
+          if (err) reject(err);
+          else resolve(data);
+        }
+      );
+    });
+
+    // 上传全图
+    const fullPromise = new Promise((resolve, reject) => {
+      cos.putObject(
+        {
+          Bucket,
+          Region,
+          Key: cosFullPath,
+          Body: fs.createReadStream(localFullPath),
+          ContentType: 'image/png',
+        },
+        (err, data) => {
+          if (err) reject(err);
+          else resolve(data);
+        }
+      );
+    });
+
+    await headerPromise
+    await fullPromise
+
+    // 删除本地临时文件
+    fs.unlinkSync(localHeaderPath);
+    fs.unlinkSync(localFullPath);
+
+    const cosHost = this.configService.get<string>('OSS_HOST'); // 你的 CDN 域名或 COS 访问域名
     return {
-      header: host + prefix + thumbnailFileName,
-      full: host + prefix + thumbnailFullFileName,
+      header: `${cosHost}/${cosHeaderPath}`,
+      full: `${cosHost}/${cosFullPath}`,
     };
   }
 

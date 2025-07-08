@@ -29,9 +29,9 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://150.158.97.130:3000",
+        target: "http://localhost:3000",
       },
-      "/static": "http://150.158.97.130:5078",
+      "/static": "http://localhost:5078",
     },
   },
   css: {

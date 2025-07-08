@@ -15,4 +15,6 @@ export default (): any => ({
       expiresIn: process.env.JWT_EXPIRES_IN,
     },
   },
+  builderHost: process.env.BUILDER_HOST,
+  ossHost: process.env.OSS_HOST
 });

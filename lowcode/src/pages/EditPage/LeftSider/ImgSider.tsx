@@ -1,13 +1,10 @@
+import { OSS_PIC } from "../../../consts/const";
 import { addCmp } from "../../../store/editStore";
 import { ICmp } from "../../../store/editStoreTypes";
 import { defaultComponentStyle, isImgComponent } from "../../../utils/const";
 import leftSideStyles from "./leftSide.module.less";
-import img1 from "../../../assets/1.jpeg";
-import img2 from "../../../assets/2.jpeg";
-import img3 from "../../../assets/3.jpeg";
-import img4 from "../../../assets/bg1.jpg";
-import img5 from "../../../assets/bg2.jpg";
-import img6 from "../../../assets/bg3.jpg";
+import { Skeleton } from "antd";
+import { useState, useEffect } from "react";
 
 const defaultStyle = {
   ...defaultComponentStyle,
@@ -15,32 +12,60 @@ const defaultStyle = {
 
 const settings: any = [
   {
-    value: img1,
+    value: OSS_PIC + '1.jpeg',
     style: defaultStyle,
   },
   {
-    value: img2,
+    value: OSS_PIC + '2.jpeg',
     style: defaultStyle,
   },
   {
-    value: img3,
+    value: OSS_PIC + '3.jpeg',
     style: defaultStyle,
   },
   {
-    value: img4,
+    value: OSS_PIC + 'bg1.jpg',
     style: defaultStyle,
   },
   {
-    value: img5,
+    value: OSS_PIC + 'bg2.jpg',
     style: defaultStyle,
   },
   {
-    value: img6,
+    value: OSS_PIC + 'bg3.jpg',
     style: defaultStyle,
   },
 ];
 
 const ImgSider = () => {
+  // 用于记录每个图片的加载状态
+  const [loadingArr, setLoadingArr] = useState<boolean[]>(() => settings.map(() => true));
+  // 用于强制刷新图片，避免缓存导致 onLoad 不触发
+  const [imgKeyArr, setImgKeyArr] = useState<number[]>(() => settings.map(() => Date.now() + Math.random()));
+
+  // 组件挂载时，重置 loadingArr，防止热更新时状态错乱
+  useEffect(() => {
+    setLoadingArr(settings.map(() => true));
+    setImgKeyArr(settings.map(() => Date.now() + Math.random()));
+  }, []);
+
+  const onImgLoad = (idx: number) => {
+    setLoadingArr((arr) => {
+      const newArr = [...arr];
+      newArr[idx] = false;
+      return newArr;
+    });
+  };
+
+  const onImgError = (idx: number) => {
+    // 失败时也隐藏骨架屏，可以自定义错误占位
+    setLoadingArr((arr) => {
+      const newArr = [...arr];
+      newArr[idx] = false;
+      return newArr;
+    });
+  };
+
   const onClick = (item: ICmp) => {
     addCmp({ ...item, type: isImgComponent });
   };
@@ -55,7 +80,7 @@ const ImgSider = () => {
   return (
     <div className={leftSideStyles.main}>
       <ul className={leftSideStyles.box}>
-        {settings.map((item: any) => (
+        {settings.map((item: any, idx: number) => (
           <li
             key={item.value}
             className={leftSideStyles.item}
@@ -63,7 +88,24 @@ const ImgSider = () => {
             draggable={true}
             onDragStart={(e) => onDragStart(e, item)}
           >
-            <img draggable={false} src={item.value} alt="" />
+            {loadingArr[idx] && (
+              <Skeleton.Image style={{ width: 80, height: 80, marginBottom: 8 }} active />
+            )}
+            <img
+              key={imgKeyArr[idx]}
+              onLoad={() => onImgLoad(idx)}
+              onError={() => onImgError(idx)}
+              draggable={false}
+              src={item.value}
+              style={{
+                width: 80,
+                height: 80,
+                display: loadingArr[idx] ? "none" : "inline-block",
+                objectFit: "cover",
+                borderRadius: 4,
+              }}
+              alt=""
+            />
           </li>
         ))}
       </ul>

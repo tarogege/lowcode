@@ -17,12 +17,12 @@ export default function ID({ data }: any) {
 
 export const getStaticPaths = async () => {
   const res = await fetch(
-    "http://localhost:3000/api/web/template/list",
+    "http://localhost:3000/api/web/content/list",
   );
   const data = (await res.json()) ||{result: {data: []}};
 
   return {
-    paths: data.result.data.map((item: any) => {
+    paths: (data.result || {data: []}).data.map((item: any) => {
       return {params: {id: item.id + '' || "2"}}
     }),
     fallback: true,
