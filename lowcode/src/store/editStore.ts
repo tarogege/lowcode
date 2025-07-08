@@ -165,7 +165,9 @@ export const saveCanvas = async (successCallback: any) => {
     title,
     content: JSON.stringify(content),
   });
-  successCallback?.(res?.id, isNew, res);
+  if(res) {
+    successCallback?.(res?.id, isNew, res);
+  }
 
   useEditStore.setState((draft) => {
     draft.hasSavedCanvas = true;

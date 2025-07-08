@@ -161,7 +161,7 @@ export class ContentService {
     url,
     { thumbnailFileName, thumbnailFullFileName },
   ) {
-    const browser = await puppeteer.launch({
+    let options: any = {
       args: [
         '--no-sandbox',
         '--lang=zh-CN',
@@ -169,7 +169,11 @@ export class ContentService {
       ],
       headless: true,
       pipe: true,
-    });
+    }
+    if(process.env.NODE_ENV === 'production') {
+      options.executablePath = '/usr/bin/google-chrome-stable'
+    }
+    const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.setViewport({ width: 750, height: 800 });
     await page.goto(url, { waitUntil: 'networkidle0' });

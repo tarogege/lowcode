@@ -1,7 +1,7 @@
-import { Link, unstable_usePrompt, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./index.module.less";
 import classNames from "classnames";
-import useEditStore, {
+import {
   clearCanvas,
   saveCanvas,
 } from "../../../store/editStore";
@@ -13,13 +13,13 @@ import {
 import { useEffect } from "react";
 
 const Header = () => {
-  const hasSavedCanvas = useEditStore((state) => state.hasSavedCanvas);
+  // const hasSavedCanvas = useEditStore((state) => state.hasSavedCanvas);
   const navigate = useNavigate();
 
-  unstable_usePrompt({
-    when: !hasSavedCanvas,
-    message: "内容尚未保存，是否确定离开此页面",
-  });
+  // unstable_usePrompt({
+  //   when: !hasSavedCanvas,
+  //   message: "内容尚未保存，是否确定离开此页面",
+  // });
 
   const save = () => {
     saveCanvas((_id: number, isNew: boolean) => {

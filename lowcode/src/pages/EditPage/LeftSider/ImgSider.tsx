@@ -89,7 +89,7 @@ const ImgSider = () => {
             onDragStart={(e) => onDragStart(e, item)}
           >
             {loadingArr[idx] && (
-              <Skeleton.Image style={{ width: 80, height: 80, marginBottom: 8 }} active />
+              <Skeleton.Image style={{ width: 118, height: 118, marginBottom: 8 }} active />
             )}
             <img
               key={imgKeyArr[idx]}
@@ -98,11 +98,7 @@ const ImgSider = () => {
               draggable={false}
               src={item.value}
               style={{
-                width: 80,
-                height: 80,
                 display: loadingArr[idx] ? "none" : "inline-block",
-                objectFit: "cover",
-                borderRadius: 4,
               }}
               alt=""
             />
