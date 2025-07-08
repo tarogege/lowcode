@@ -120,7 +120,7 @@ const ListPage = () => {
               <>
                 <a
                   target="_blank"
-                  href={"http://builder.codebus.tech/?id=" + id}
+                  href={"http://ssgbuilder.dearmaomao.cn/?id=" + id}
                 >
                   线上查看（切移动端）
                 </a>
@@ -130,7 +130,7 @@ const ListPage = () => {
               <>
                 <a
                   target="_blank"
-                  href={"http://builder.codebus.tech/?id=" + id + "&preview"}
+                  href={"http://ssgbuilder.dearmaomao.cn/?id=" + id + "&preview"}
                 >
                   线下查看（切移动端）
                 </a>

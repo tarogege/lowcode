@@ -168,7 +168,7 @@ const settings: any = [
     },
     onClick: {
       // post
-      url: "http://template.codebus.tech" + loginEnd,
+      url: "http://lowcode.dearmaomao.cn" + loginEnd,
       afterSuccess: "pop", //url
       popMsg: "弹出提示语",
       link: "",

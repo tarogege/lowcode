@@ -82,6 +82,7 @@ export class ContentService {
     const [data, count] = await this.contentRepo.findAndCount({
       where: {
         type: 'template',
+        isDelete: false
       },
       order: { createAt: 'DESC' },
       skip: (page - 1) * pageSize,
@@ -175,7 +176,7 @@ export class ContentService {
     }
     const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
-    await page.setViewport({ width: 750, height: 800 });
+    await page.setViewport({ width: 500, height: 700 });
     await page.goto(url, { waitUntil: 'networkidle0' });
 
     // 截图

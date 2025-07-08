@@ -37,8 +37,7 @@ const Header = () => {
         navigate(`?id=${_id}`);
       }
 
-      // FIXME:（改成自己的地址）跳转生成器项目页
-      window.open("http://builder.codebus.tech?id=" + _id + "&preview");
+      window.open("http://ssgbuilder.dearmaomao.cn?id=" + _id + "&preview");
     });
   };
 
