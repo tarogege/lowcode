@@ -17,7 +17,7 @@ export default function ID({ data }: any) {
 
 export const getStaticPaths = async () => {
   const res = await fetch(
-    "http://localhost:3000/api/web/content/list",
+    "http://localhost:3000/api/web/template/list",
   );
   const data = (await res.json()) ||{result: {data: []}};
 
@@ -44,6 +44,5 @@ export async function getStaticProps({ params }: { params: { id: string } }) {
       data: (data.result && !data.result.isDelete ) ? data.result : null,
     },
     revalidate: false, // 关闭自动 ISR，改为 on-demand revalidate
-    fallback: true,
   };
 }
