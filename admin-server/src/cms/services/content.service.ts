@@ -10,6 +10,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as COS from 'cos-nodejs-sdk-v5';
 import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 
 
 // TODO: need to store it in configService
@@ -70,8 +71,14 @@ export class ContentService {
     }
 
     if(!isCreate) {
-      // update的时候，需要给nextjs发送请求，更新ssg生产的html页面
-      await this.httpService.get(`${process.env.BUILDER_HOST}/api/revalidate?id=${id}`)
+      try{
+        // update的时候，需要给nextjs发送请求，更新ssg生产的html页面
+        await firstValueFrom( this.httpService.get(`${process.env.BUILDER_HOST}/api/revalidate?id=${id}`))
+        this.loggerService.info(null, 'Revalidate response:');
+      } catch(err) {
+        console.log(err, 'err')
+        this.loggerService.error(null, 'Revalidate error:');
+      }
     }
     const thumbanail = await this.takeScreenshotsAndUpload(contentDto.id);
     contentDto.thumbnail = thumbanail;
