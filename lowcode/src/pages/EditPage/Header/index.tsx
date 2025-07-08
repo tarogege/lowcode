@@ -37,7 +37,7 @@ const Header = () => {
         navigate(`?id=${_id}`);
       }
 
-      window.open("http://ssgbuilder.dearmaomao.cn?id=" + _id + "&preview");
+      window.open("http://ssgbuilder.dearmaomao.cn/" + _id + "?preview");
     });
   };
 
