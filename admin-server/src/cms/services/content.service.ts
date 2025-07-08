@@ -68,12 +68,13 @@ export class ContentService {
       // 更新画布
       await this.contentRepo.updateOne({ id }, { $set: contentDto });
     }
-    const thumbanail = await this.takeScreenshotsAndUpload(contentDto.id);
-    contentDto.thumbnail = thumbanail;
+
     if(!isCreate) {
       // update的时候，需要给nextjs发送请求，更新ssg生产的html页面
-      this.httpService.get(`${process.env.BUILDER_HOST}/api/revalidate?id=${id}`)
+      await this.httpService.get(`${process.env.BUILDER_HOST}/api/revalidate?id=${id}`)
     }
+    const thumbanail = await this.takeScreenshotsAndUpload(contentDto.id);
+    contentDto.thumbnail = thumbanail;
     await this.contentRepo.updateOne({ id }, { $set: contentDto });
     return contentDto;
   }
@@ -186,6 +187,8 @@ export class ContentService {
     const page = await browser.newPage();
     await page.setViewport({ width: 500, height: 700 });
     await page.goto(url, { waitUntil: 'networkidle0' });
+    // 用于nextjs页面revalidate之后确保能看到最新的内容
+    await page.reload();
 
     // 截图
     await page.screenshot({ path: thumbnailFileName });
